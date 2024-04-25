@@ -59,7 +59,7 @@ class LSTM_Model(nn.Module):
 input_dim = 1
 hidden_dim = 50
 num_layers = 1
-output_dim = 1
+output_dim = 2
 
 model = LSTM_Model(input_dim, hidden_dim, num_layers, output_dim)
 
