@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started">
+    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/LSTM_Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/LSTM_Model.py" afterDir="false" />
     </list>
@@ -123,12 +123,21 @@
       <option name="project" value="LOCAL" />
       <updated>1714088487989</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
+      <option name="closed" value="true" />
+      <created>1714354194826</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1714354194826</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Init project" />
     <MESSAGE value="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started" />
+    <MESSAGE value="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1" />
   </component>
 </project>

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler
 from torch.utils.data import DataLoader, TensorDataset
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -20,8 +20,10 @@ closes = df['close'].values.reshape(-1, 1)
 
 
 # Normalize data
-scaler = MinMaxScaler()
+scaler = MaxAbsScaler()
 closes_scaled = scaler.fit_transform(closes)
+
+
 
 
 # Create data sequences for LSTM training
@@ -35,7 +37,7 @@ def sequences(data, sequence_length):
         ys.append(y)
     return np.array(xs), np.array(ys)
 
-sequence_length = 50  # Number of Data used for next prediction
+sequence_length = 100  # Number of Data used for next prediction
 X, y = sequences(closes_scaled, sequence_length)
 
 #split data
@@ -72,7 +74,7 @@ class LSTM_Model(nn.Module):
 #MODEL PARAMETERS
 
 input_dim = 1
-hidden_dim = 25
+hidden_dim = 20
 num_layers = 1
 output_dim = 1
 
@@ -95,7 +97,7 @@ opt = torch.optim.Adam(model.parameters(), lr=0.03)
 
 #TRAINING LOOP
 
-num_epochs = 50
+num_epochs = 100
 
 for epochs in range(num_epochs):
     model.train()
