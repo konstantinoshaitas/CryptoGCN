@@ -12,3 +12,7 @@ for i in range(loop):
     ys.append(y)
 
 print(f'xs: {xs}, ys: {ys}')
+
+class Define():
+    def method
+        for

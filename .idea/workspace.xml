@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/LSTM_Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/LSTM_Model.py" afterDir="false" />
-    </list>
+    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -131,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714354194826</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
+      <option name="closed" value="true" />
+      <created>1714354727713</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1714354727713</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
