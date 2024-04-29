@@ -14,4 +14,3 @@ for i in range(loop):
 print(f'xs: {xs}, ys: {ys}')
 
 
-plt.plot()

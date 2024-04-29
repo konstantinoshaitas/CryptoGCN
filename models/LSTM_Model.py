@@ -1,4 +1,5 @@
-import matplotlib.pyplot as plt
+#PACKAGES
+
 import pandas as pd
 import numpy as np
 import torch
@@ -12,21 +13,26 @@ from tensorflow.keras.layers import Dense, LSTM
 import matplotlib.pyplot as plt
 
 
-# Load data
+# LOAD
+
 df = pd.read_csv(r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
 closes = df['close'].values.reshape(-1, 1)
 
 
 
 
-# Normalize data
+# NORMALISATION
+
+# scaler = MinMaxScaler()
+# scaler = StandardScaler
 scaler = MaxAbsScaler()
 closes_scaled = scaler.fit_transform(closes)
 
 
 
 
-# Create data sequences for LSTM training
+# DATA MANIPULATION
+
 def sequences(data, sequence_length):
     xs, ys = [], []
     loop = len(data) - sequence_length
@@ -37,21 +43,22 @@ def sequences(data, sequence_length):
         ys.append(y)
     return np.array(xs), np.array(ys)
 
-sequence_length = 100  # Number of Data used for next prediction
+sequence_length = 100  # Number of prior data considered for next prediction
 X, y = sequences(closes_scaled, sequence_length)
 
-#split data
+
+
+#TRAIN TEST SPLIT
 
 # X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, test_size=0.3)
-# print(f'X_test: {X_test}')
-# print(f'y_test: {scaler.inverse_transform(y_test)}')
+# NOTE: sklearn train test split does not work due to randomising sequential input-outputs
 
-# Define the split point, for example, 70% for training and 30% for testing
-split_ratio = int(len(closes_scaled) * 0.7)
+split_ratio = int(len(closes_scaled) * 0.7) ## 70% train / test split
 
-# Split the data into training and testing sets without shuffling
 X_train, y_train = X[:split_ratio], y[:split_ratio]
 X_test, y_test = X[split_ratio:], y[split_ratio:]
+
+
 
 class LSTM_Model(nn.Module):
     def __init__(self, input_dim, hidden_dim, num_layers, output_dim):
@@ -71,6 +78,7 @@ class LSTM_Model(nn.Module):
         return out
 
 
+
 #MODEL PARAMETERS
 
 input_dim = 1
@@ -79,6 +87,7 @@ num_layers = 1
 output_dim = 1
 
 model = LSTM_Model(input_dim, hidden_dim, num_layers, output_dim)
+
 
 
 #CREATE TENSORS FROM X and y
@@ -92,37 +101,39 @@ y_test_tensors = torch.tensor(y_test).float()
 #LOSS
 
 measure_loss = nn.MSELoss()
-opt = torch.optim.Adam(model.parameters(), lr=0.03)
+optim = torch.optim.Adam(model.parameters(), lr=0.03)
 
 
-#TRAINING LOOP
+
+#TRAINING
 
 num_epochs = 100
 
 for epochs in range(num_epochs):
     model.train()
-    opt.zero_grad()
+    optim.zero_grad()
     y_pred = model(X_train_tensors)
     MSE = measure_loss(y_pred, y_train_tensors)
     MSE.backward()
-    opt.step()
+    optim.step()
 
     if epochs % 10 == 0:
         print(f' Epoch{epochs}, Loss:{MSE.item()}')
 
 
 
+#TESTING & PLOTS
 
 model.eval()
 with torch.no_grad():
     predictions = model(X_test_tensors)
     predictions_np = predictions.numpy()
     predictions_np = predictions_np.reshape(-1, 1)
-    predicted_prices = scaler.inverse_transform(predictions_np) ## continue here
+    predicted_prices = scaler.inverse_transform(predictions_np)
 
 true_prices = scaler.inverse_transform(y_test)
 
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4, 4))
 plt.plot(predicted_prices, label='predictions', color='red', linestyle='--')
 plt.plot(true_prices, label='true', color='blue')
 
