@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="Init project">
-      <change afterPath="$PROJECT_DIR$/models/LSTM_Model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/test.py" afterDir="false" />
+    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/LSTM_Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/LSTM_Model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,16 +44,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.LSTM_Model.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\koko\Desktop\THESIS\CryptoGCN\Models" />
@@ -109,11 +107,28 @@
       <option name="project" value="LOCAL" />
       <updated>1714064637729</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Init project">
+      <option name="closed" value="true" />
+      <created>1714088395718</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1714088395718</updated>
+    </task>
+    <task id="LOCAL-00003" summary="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started">
+      <option name="closed" value="true" />
+      <created>1714088487989</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1714088487989</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Init project" />
-    <option name="LAST_COMMIT_MESSAGE" value="Init project" />
+    <MESSAGE value="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started" />
   </component>
 </project>

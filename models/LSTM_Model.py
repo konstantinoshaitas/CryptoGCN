@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import torch
@@ -8,16 +9,18 @@ from torch.utils.data import DataLoader, TensorDataset
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM
+import matplotlib.pyplot as plt
 
 
 # Load data
-df = pd.read_csv(r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')       # Update path as necessary
+df = pd.read_csv(r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
 closes = df['close'].values.reshape(-1, 1)
 
 
 
+
 # Normalize data
-scaler = StandardScaler()
+scaler = MinMaxScaler()
 closes_scaled = scaler.fit_transform(closes)
 
 
@@ -32,9 +35,21 @@ def sequences(data, sequence_length):
         ys.append(y)
     return np.array(xs), np.array(ys)
 
-sequence_length = 10  # Number of Data used for next prediction
+sequence_length = 50  # Number of Data used for next prediction
 X, y = sequences(closes_scaled, sequence_length)
 
+#split data
+
+# X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, test_size=0.3)
+# print(f'X_test: {X_test}')
+# print(f'y_test: {scaler.inverse_transform(y_test)}')
+
+# Define the split point, for example, 70% for training and 30% for testing
+split_ratio = int(len(closes_scaled) * 0.7)
+
+# Split the data into training and testing sets without shuffling
+X_train, y_train = X[:split_ratio], y[:split_ratio]
+X_test, y_test = X[split_ratio:], y[split_ratio:]
 
 class LSTM_Model(nn.Module):
     def __init__(self, input_dim, hidden_dim, num_layers, output_dim):
@@ -57,17 +72,19 @@ class LSTM_Model(nn.Module):
 #MODEL PARAMETERS
 
 input_dim = 1
-hidden_dim = 50
+hidden_dim = 25
 num_layers = 1
-output_dim = 2
+output_dim = 1
 
 model = LSTM_Model(input_dim, hidden_dim, num_layers, output_dim)
 
 
 #CREATE TENSORS FROM X and y
 
-X_train_tensors = torch.Tensor(X).float()
-y_train_tensors = torch.tensor(y).float()
+X_train_tensors = torch.Tensor(X_train).float()
+y_train_tensors = torch.tensor(y_train).float()
+X_test_tensors = torch.tensor(X_test).float()
+y_test_tensors = torch.tensor(y_test).float()
 
 
 #LOSS
@@ -93,3 +110,21 @@ for epochs in range(num_epochs):
 
 
 
+
+model.eval()
+with torch.no_grad():
+    predictions = model(X_test_tensors)
+    predictions_np = predictions.numpy()
+    predictions_np = predictions_np.reshape(-1, 1)
+    predicted_prices = scaler.inverse_transform(predictions_np) ## continue here
+
+true_prices = scaler.inverse_transform(y_test)
+
+plt.figure(figsize=(4,4))
+plt.plot(predicted_prices, label='predictions', color='red', linestyle='--')
+plt.plot(true_prices, label='true', color='blue')
+
+plt.xlabel('time')
+plt.ylabel('prices')
+plt.legend()
+plt.show()
