@@ -13,6 +13,3 @@ for i in range(loop):
 
 print(f'xs: {xs}, ys: {ys}')
 
-class Define():
-    def method
-        for
