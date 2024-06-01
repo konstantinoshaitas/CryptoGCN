@@ -1,89 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="test gitfront">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/LSTM_Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/LSTM_Model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;konstantinoshaitas&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/konstantinoshaitas/CryptoGCN.git&quot;,
-    &quot;accountId&quot;: &quot;a605e28b-c337-41c2-bc1a-32fe3f061852&quot;
-  }
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 3
-}</component>
-  <component name="ProjectId" id="2fbKoKvfJmPhPHvA2nV65MzyYWy" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2hHex0eXuXLKEqdwnUQzJ2ZK2dC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/koko/Desktop/THESIS/CryptoGCN"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\koko\Desktop\THESIS\CryptoGCN\Models" />
-    </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="CryptoGCN" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-  </component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -94,85 +32,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5458fbbd-e219-43ec-b6e6-587104231fde" name="Changes" comment="" />
-      <created>1714064510979</created>
+      <changelist id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="" />
+      <created>1717255673298</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1714064510979</updated>
+      <updated>1717255673298</updated>
     </task>
-    <task id="LOCAL-00001" summary="Init project">
-      <option name="closed" value="true" />
-      <created>1714064637728</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1714064637729</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Init project">
-      <option name="closed" value="true" />
-      <created>1714088395718</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1714088395718</updated>
-    </task>
-    <task id="LOCAL-00003" summary="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started">
-      <option name="closed" value="true" />
-      <created>1714088487989</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1714088487989</updated>
-    </task>
-    <task id="LOCAL-00004" summary="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
-      <option name="closed" value="true" />
-      <created>1714354194826</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1714354194826</updated>
-    </task>
-    <task id="LOCAL-00005" summary="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
-      <option name="closed" value="true" />
-      <created>1714354727713</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1714354727713</updated>
-    </task>
-    <task id="LOCAL-00006" summary="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1">
-      <option name="closed" value="true" />
-      <created>1714355484852</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1714355484852</updated>
-    </task>
-    <task id="LOCAL-00007" summary="- testing github push -&gt; gitfront display">
-      <option name="closed" value="true" />
-      <created>1714355530434</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1714355530434</updated>
-    </task>
-    <task id="LOCAL-00008" summary="test gitfront">
-      <option name="closed" value="true" />
-      <created>1714355567891</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1714355567891</updated>
-    </task>
-    <option name="localTasksCounter" value="9" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Init project" />
-    <MESSAGE value="- Added Models, Processing, Data Tabs&#10;- LSTM simple model started" />
-    <MESSAGE value="-Fixed incorrect train test split&#10;-LSTM Class: &#10;    -Added Model Parameters&#10;    -Fixed incorrect output_dim 2 -&gt; 1" />
-    <MESSAGE value="- testing github push -&gt; gitfront display" />
-    <MESSAGE value="test gitfront" />
-    <option name="LAST_COMMIT_MESSAGE" value="test gitfront" />
   </component>
 </project>
