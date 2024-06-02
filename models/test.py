@@ -1,6 +1,7 @@
 import numpy as np
 
-data = np.array((5,6,10,20,30), dtype=float)
+data = np.array((5,6,10,20,30,60,70), dtype=float)
+data = data.reshape(-1,1)
 sequence_length = 3
 
 xs, ys = [], []
@@ -12,5 +13,9 @@ for i in range(loop):
     ys.append(y)
 
 print(f'xs: {xs}, ys: {ys}')
+print(len(ys))
+
+print(data[0:(0 + sequence_length)])
+print(data[0 + sequence_length])
 
 
