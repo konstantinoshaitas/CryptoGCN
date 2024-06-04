@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added tensorflow lstm model&#10;added &gt;1 features to lstm&#10;added REPRODUCIBILITY&#10;added AESTHETIC&#10;added TODOS">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/lstm_tensorflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tensorflow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,12 +93,21 @@
       <option name="project" value="LOCAL" />
       <updated>1717365577810</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning">
+      <option name="closed" value="true" />
+      <created>1717509926785</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717509926785</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="testing github version control" />
     <MESSAGE value="added tensorflow lstm model&#10;added &gt;1 features to lstm&#10;added REPRODUCIBILITY&#10;added AESTHETIC&#10;added TODOS" />
-    <option name="LAST_COMMIT_MESSAGE" value="added tensorflow lstm model&#10;added &gt;1 features to lstm&#10;added REPRODUCIBILITY&#10;added AESTHETIC&#10;added TODOS" />
+    <MESSAGE value="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
+    <option name="LAST_COMMIT_MESSAGE" value="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
   </component>
 </project>
