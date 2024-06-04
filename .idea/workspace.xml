@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/lstm_tensorflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tensorflow.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -101,7 +104,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717509926785</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning">
+      <option name="closed" value="true" />
+      <created>1717518697719</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717518697719</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

@@ -22,7 +22,7 @@ random_seed = 42
 np.random.seed(random_seed)
 tf.random.set_seed(random_seed)
 random.seed(random_seed)
-sequence_length = 14  # Number of prior data considered for next prediction
+sequence_length = 21  # Number of prior data considered for next prediction
 
 '''
 LOAD
@@ -35,9 +35,9 @@ data.columns = data.columns.str.lower()
 
 data['time'] = pd.to_datetime(data['time'])
 dates = data['time'].values
-date_sequences = [dates[i + sequence_length] for i in range(len(dates) - sequence_length)]
+date_sequences = [dates[i + sequence_length] for i in range(len(dates) - sequence_length)] #create data sequences for plots
 
-data = data.drop(columns="time")
+data = data.drop(columns="time") #drop dates from dataset for model train, pred, and eval
 print(data.info())
 print(data.head())
 data = data.values
@@ -67,9 +67,6 @@ def sequences(data, sequence_length):
         xs.append(x)
         ys.append(y)
     return np.array(xs), np.array(ys)
-
-
-
 
 
 '''
@@ -118,14 +115,14 @@ for train_index, test_index in tscv.split(X):
 
 
 '''
-LSTM Model in Keras
+LSTM MODEL KERAS
 '''
 num_epochs = 32
 
 model = Sequential()
-model.add(LSTM(units=20, return_sequences=False, input_shape=(sequence_length, X.shape[2]), kernel_regularizer=l2(0.01)))
+model.add(LSTM(units=40, return_sequences=False, input_shape=(sequence_length, X.shape[2]), kernel_regularizer=l2(0.01)))
 model.add(Dropout(0.2))
-model.add(Dense(units=50))
+model.add(Dense(units=20))
 model.add(Dropout(0.3))
 model.add(Dense(units=1))
 
@@ -142,7 +139,7 @@ print(f'Train Loss: {train_loss}')
 #TODO hyperparameters, layers, dense, hidden_nodes etc
 
 '''
-Testing & Plots
+PREDICTIONS
 '''
 
 predictions = model.predict(X_test)
@@ -155,12 +152,6 @@ predicted_prices = scaler.inverse_transform(predicted_prices_scaled)[:, 3]
 true_prices_scaled = np.zeros((len(y_test), data.shape[1]))  # Create zero array for true prices
 true_prices_scaled[:, 3] = y_test.flatten()  # Only the 'close' column (index 3)
 true_prices = scaler.inverse_transform(true_prices_scaled)[:, 3]
-
-
-
-
-#TODO show train and test error
-#   test for overfitting
 
 
 '''
