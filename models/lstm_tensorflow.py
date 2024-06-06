@@ -44,6 +44,22 @@ data = data.values
 # print(len(data))
 # print(data.shape)
 # print(data[0])
+#TODO add RSI and ATR (average true range) as features
+
+
+def rma(s: pd.Series, period: int) -> pd.Series:
+    return s.ewm(alpha=1 / period).mean()
+
+def atr(df: pd.DataFrame, length: int = 14) -> pd.Series:
+    # Ref: https://stackoverflow.com/a/74282809/
+    high, low, prev_close = df['high'], df['low'], df['close'].shift()
+    tr_all = [high - low, high - prev_close, low - prev_close]
+    tr_all = [tr.abs() for tr in tr_all]
+    tr = pd.concat(tr_all, axis=1).max(axis=1)
+    atr_ = rma(tr, length)
+    return atr_
+
+ATR = atr(df)
 
 '''
 AESTHETIC
@@ -120,7 +136,7 @@ LSTM MODEL KERAS
 num_epochs = 32
 
 model = Sequential()
-model.add(LSTM(units=40, return_sequences=False, input_shape=(sequence_length, X.shape[2]), kernel_regularizer=l2(0.01)))
+model.add(LSTM(units=40, return_sequences=False, return_state=True, input_shape=(sequence_length, X.shape[2]), kernel_regularizer=l2(0.01)))
 model.add(Dropout(0.2))
 model.add(Dense(units=20))
 model.add(Dropout(0.3))
@@ -129,7 +145,20 @@ model.add(Dense(units=1))
 
 model.compile(optimizer='adam', loss='mean_squared_error')  #COMPILE MODEL
 
-trained_model = model.fit(X_train, y_train, epochs=num_epochs, batch_size=32, validation_split=0.1, verbose=1)  #TRAIN MODEL
+trained_model = model.fit(X_train, y_train, epochs=num_epochs, batch_size=32, validation_split=0.15, verbose=1)  #TRAIN MODEL
+
+
+'''
+EXTRACT HIDDEN STATE
+'''
+
+lstm_layer = model.layers[0]
+lstm_model = tf.keras.Model(inputs=model.input, outputs=lstm_layer.output)
+#TODO CONTINUE HERE (EXTRACT HIDDEN STATES)
+
+'''
+TRAIN / TEST ERROR
+'''
 
 test_loss = model.evaluate(X_test, y_test, verbose=0)
 train_loss = model.evaluate(X_train, y_train, verbose=0)
@@ -137,6 +166,7 @@ print(f'Test Loss: {test_loss}')
 print(f'Train Loss: {train_loss}')
 
 #TODO hyperparameters, layers, dense, hidden_nodes etc
+#   Extract final hidden layer.
 
 '''
 PREDICTIONS
@@ -153,6 +183,7 @@ true_prices_scaled = np.zeros((len(y_test), data.shape[1]))  # Create zero array
 true_prices_scaled[:, 3] = y_test.flatten()  # Only the 'close' column (index 3)
 true_prices = scaler.inverse_transform(true_prices_scaled)[:, 3]
 
+#TODO train_predictions vs true
 
 '''
 PLOTS
