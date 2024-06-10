@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning">
-      <change afterPath="$PROJECT_DIR$/models/temporal_gcn.py" afterDir="false" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added ATR&#10;created TGCN classes for fully connected layer">
+      <change afterPath="$PROJECT_DIR$/models/correlation_matrix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/temporal_gcn_3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/lstm_tensorflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tensorflow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,13 +122,22 @@
       <option name="project" value="LOCAL" />
       <updated>1717520299832</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added ATR&#10;created TGCN classes for fully connected layer">
+      <option name="closed" value="true" />
+      <created>1717640833028</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1717640833028</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="testing github version control" />
     <MESSAGE value="added tensorflow lstm model&#10;added &gt;1 features to lstm&#10;added REPRODUCIBILITY&#10;added AESTHETIC&#10;added TODOS" />
     <MESSAGE value="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
-    <option name="LAST_COMMIT_MESSAGE" value="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
+    <MESSAGE value="added ATR&#10;created TGCN classes for fully connected layer" />
+    <option name="LAST_COMMIT_MESSAGE" value="added ATR&#10;created TGCN classes for fully connected layer" />
   </component>
 </project>
