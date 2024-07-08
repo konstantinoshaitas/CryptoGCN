@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="added ATR&#10;created TGCN classes for fully connected layer">
-      <change afterPath="$PROJECT_DIR$/models/correlation_matrix.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/temporal_gcn_3.py" afterDir="false" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="started trialing correlation matrix and tgcn">
+      <change afterPath="$PROJECT_DIR$/models/lstm_tf_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/lstm_tensorflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tensorflow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/temporal_gcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/temporal_gcn_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/temporal_gcn_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/temporal_gcn_2_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/temporal_gcn_3.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/temporal_gcn_3_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,18 +49,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.lstm_tensorflow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/koko/Desktop/THESIS/CryptoGCN&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.toDoOptions&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.LSTM_Model.executor": "Run",
+    "Python.lstm_tensorflow.executor": "Run",
+    "Python.lstm_tf_class.executor": "Debug",
+    "Python.temporal_gcn.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/koko/Desktop/THESIS/CryptoGCN",
+    "settings.editor.selected.configurable": "vcs.Git"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -66,6 +71,9 @@
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\koko\AppData\Roaming\Subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="" />
@@ -130,14 +138,45 @@
       <option name="project" value="LOCAL" />
       <updated>1717640833028</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="started trialing correlation matrix and tgcn">
+      <option name="closed" value="true" />
+      <created>1717980224581</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1717980224581</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="testing github version control" />
     <MESSAGE value="added tensorflow lstm model&#10;added &gt;1 features to lstm&#10;added REPRODUCIBILITY&#10;added AESTHETIC&#10;added TODOS" />
     <MESSAGE value="added overfitting tests&#10;added datetime (test dates)&#10;added hyperparameter tuning" />
     <MESSAGE value="added ATR&#10;created TGCN classes for fully connected layer" />
-    <option name="LAST_COMMIT_MESSAGE" value="added ATR&#10;created TGCN classes for fully connected layer" />
+    <MESSAGE value="started trialing correlation matrix and tgcn" />
+    <option name="LAST_COMMIT_MESSAGE" value="started trialing correlation matrix and tgcn" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/models/lstm_tf_class.py</url>
+          <line>190</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
