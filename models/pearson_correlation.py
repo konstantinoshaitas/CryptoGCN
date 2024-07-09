@@ -3,13 +3,15 @@ import numpy as np
 
 
 class CorrelationMatrix:
-    def __init__(self, data):
+    def __init__(self, data, window_size=48):
         """
         Initializes the CorrelationMatrix with the data.
 
         :param data: A DataFrame containing data for multiple assets. Each column should represent an asset.
+        :param window_size: The size of the sliding window for temporal correlation.
         """
         self.data = data
+        self.window_size = window_size
 
     def calculate_returns(self):
         """
@@ -21,16 +23,17 @@ class CorrelationMatrix:
         """
         Calculate standard deviation of returns and EWMA volatility for each asset.
         """
-        self.volatility = self.returns.rolling(window=48).std()
-        self.ewma_volatility = self.returns.pow(2).ewm(span=48).mean().pow(0.5)
+        self.volatility = self.returns.rolling(window=self.window_size).std()
+        self.ewma_volatility = self.returns.pow(2).ewm(span=self.window_size).mean().pow(0.5)
         self.volatility = self.volatility.dropna()
         self.ewma_volatility = self.ewma_volatility.dropna()
 
-    def calculate_correlation_matrix(self, method='returns'):
+    def calculate_denoised_correlation_matrices(self, method='returns'):
         """
-        Calculate the Pearson correlation matrix.
+        Calculate and denoise the Pearson correlation matrices over time.
 
         :param method: Method to calculate correlation ('returns', 'volatility', 'ewma_volatility')
+        :return: List of denoised correlation matrices over time.
         """
         if method == 'returns':
             data_series = self.returns
@@ -41,10 +44,15 @@ class CorrelationMatrix:
         else:
             raise ValueError("Method should be 'returns', 'volatility', or 'ewma_volatility'")
 
-        # Normalize the time series
-        normalized_data = (data_series - data_series.mean()) / data_series.std()
-        correlation_matrix = normalized_data.corr()
-        return correlation_matrix
+        denoised_matrices = []
+        for start in range(0, len(data_series) - self.window_size + 1):
+            window_data = data_series[start:start + self.window_size]
+            normalized_data = (window_data - window_data.mean()) / window_data.std()
+            correlation_matrix = normalized_data.corr()
+            denoised_matrix = self.denoise_correlation_matrix(correlation_matrix)
+            denoised_matrices.append(denoised_matrix)
+
+        return denoised_matrices
 
     def denoise_correlation_matrix(self, correlation_matrix):
         """

@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="1. Modified LSTM&#10;2. Created LSTM Class&#10;2.1 Added methods for&#10;2.1.1 load data&#10;2.1.2 technical ind&#10;2.1.3 preprocess&#10;2.1.4 model train&#10;2.1.5 evaluation and prediction&#10;2.1.6 hidden states&#10;2.1.7 display">
-      <change afterPath="$PROJECT_DIR$/models/correlation_2.py" afterDir="false" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="- Created Pearson Correlation &#10;- removed test files for correlation and for graphCN">
+      <change afterPath="$PROJECT_DIR$/models/gcn_class.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/run_tgcn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/correlation_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/correlation_matrix.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/lstm_pytorch1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/temporal_gcn_2_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/temporal_gcn_3_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/temporal_gcn_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/pearson_correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/pearson_correlation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,21 +47,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.LSTM_Model.executor": "Run",
-    "Python.correlation_matrix.executor": "Run",
-    "Python.lstm_tensorflow.executor": "Run",
-    "Python.lstm_tf_class.executor": "Run",
-    "Python.temporal_gcn.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/koko/Desktop/THESIS/CryptoGCN",
-    "settings.editor.selected.configurable": "vcs.Git"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.correlation_matrix.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lstm_tensorflow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lstm_tf_class.executor&quot;: &quot;Run&quot;,
+    &quot;Python.temporal_gcn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/koko/Desktop/THESIS/CryptoGCN&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -155,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720467394650</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="- Created Pearson Correlation &#10;- removed test files for correlation and for graphCN">
+      <option name="closed" value="true" />
+      <created>1720481844894</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1720481844894</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -176,7 +182,8 @@
     <MESSAGE value="added ATR&#10;created TGCN classes for fully connected layer" />
     <MESSAGE value="started trialing correlation matrix and tgcn" />
     <MESSAGE value="1. Modified LSTM&#10;2. Created LSTM Class&#10;2.1 Added methods for&#10;2.1.1 load data&#10;2.1.2 technical ind&#10;2.1.3 preprocess&#10;2.1.4 model train&#10;2.1.5 evaluation and prediction&#10;2.1.6 hidden states&#10;2.1.7 display" />
-    <option name="LAST_COMMIT_MESSAGE" value="1. Modified LSTM&#10;2. Created LSTM Class&#10;2.1 Added methods for&#10;2.1.1 load data&#10;2.1.2 technical ind&#10;2.1.3 preprocess&#10;2.1.4 model train&#10;2.1.5 evaluation and prediction&#10;2.1.6 hidden states&#10;2.1.7 display" />
+    <MESSAGE value="- Created Pearson Correlation &#10;- removed test files for correlation and for graphCN" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Created Pearson Correlation &#10;- removed test files for correlation and for graphCN" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
