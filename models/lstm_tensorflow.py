@@ -42,7 +42,6 @@ print(data.info())
 print(data.head())
 data = data.values
 
-
 # print(len(data))
 # print(data.shape)
 # print(data[0])
@@ -51,6 +50,8 @@ data = data.values
 """
 TECHNICAL INDICATORS
 """
+
+
 def rma(pandaseries: pd.Series, period: int) -> pd.Series:
     """
      Calculate the Running Moving Average (RMA) of a given series.
@@ -84,6 +85,7 @@ def atr(df: pd.DataFrame, length: int = 14) -> pd.Series:
     atr_ = rma(tr, length)
     return atr_
 
+
 def rsi(df: pd.DataFrame, length: int = 14) -> pd.Series:
     """
     Calculate the Relative Strength Index (RSI) for a given DataFrame.
@@ -113,6 +115,7 @@ def rsi(df: pd.DataFrame, length: int = 14) -> pd.Series:
     rsi_ = 100 - (100 / (1 + rs))
 
     return rsi_
+
 
 RSI = rsi(df)
 ATR = atr(df)
@@ -183,9 +186,9 @@ for train_index, test_index in tscv.split(X):
 #
 # X_train, y_train, X_test, y_test = X[:split_ratio], y[:split_ratio], X[split_ratio:], y[split_ratio:]
 # X_unscaled_test, y_unscaled_test = X_unscaled[split_ratio:], y_unscaled[split_ratio:]
-# y_true = y_unscaled_test #actual prices from our test set
+# y_true = y_unscaled_test  #actual prices from our test set
 # test_dates = date_sequences[split_ratio:]
-
+# #
 # print(f'X_train shape : {X_train.shape}')
 # print(f'X train last 3: {X_unscaled_train[-3:]}')
 # print(f'Y train last 3: {y_unscaled_train[-3:]}')

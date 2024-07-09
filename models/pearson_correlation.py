@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 
-
 class CorrelationMatrix:
     def __init__(self, data, window_size=48):
         """
@@ -10,14 +9,14 @@ class CorrelationMatrix:
         :param data: A DataFrame containing data for multiple assets. Each column should represent an asset.
         :param window_size: The size of the sliding window for temporal correlation.
         """
-        self.data = data
+        self.data = data.drop(columns=['time']).apply(pd.to_numeric, errors='coerce')  # Ensure all data is numeric and drop the time column
         self.window_size = window_size
 
     def calculate_returns(self):
         """
         Calculate daily returns for each asset.
         """
-        self.returns = self.data.pct_change().dropna()
+        self.returns = self.data.pct_change(fill_method=None).dropna()
 
     def calculate_volatility(self):
         """

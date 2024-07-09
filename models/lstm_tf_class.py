@@ -36,8 +36,8 @@ class CryptoLSTM:
         self.dates = df[self.date_col].values
         self.date_sequences = [self.dates[i + self.sequence_length] for i in range(len(self.dates) - self.sequence_length)]
         self.data = df.drop(columns=self.date_col)
-        print(self.data.info())
-        print(self.data.head())
+        # print(self.data.info())
+        # print(self.data.head())
 
     def add_technical_indicators(self):
         def rma(pandaseries: pd.Series, period: int) -> pd.Series:
@@ -61,7 +61,13 @@ class CryptoLSTM:
 
         self.data["RSI"] = rsi(self.data)
         self.data["ATR"] = atr(self.data)
+        self.drop_null_columns()
         self.data = self.data.dropna()
+
+    def drop_null_columns(self, threshold=0.8):
+        for column in self.data.columns:
+            if self.data[column].isna().mean() >= threshold:
+                self.data.drop(columns=[column], inplace=True)
 
     def preprocess_data(self):
         self.data_scaled = self.scaler.fit_transform(self.data)
@@ -86,6 +92,15 @@ class CryptoLSTM:
             self.y_unscaled_train, self.y_unscaled_test = self.y_unscaled[train_index], self.y_unscaled[test_index]
             self.y_true = self.y_unscaled_test
             self.test_dates = [self.date_sequences[i] for i in test_index]
+
+    def manual_train_test_split(self, split_ratio=0.75):
+        split_index = int(len(self.X) * split_ratio)
+        self.X_train, self.X_test = self.X[:split_index], self.X[split_index:]
+        self.y_train, self.y_test = self.y[:split_index], self.y[split_index:]
+        self.X_unscaled_train, self.X_unscaled_test = self.X_unscaled[:split_index], self.X_unscaled[split_index:]
+        self.y_unscaled_train, self.y_unscaled_test = self.y_unscaled[:split_index], self.y_unscaled[split_index:]
+        self.y_true = self.y_unscaled_test
+        self.test_dates = self.dates[self.sequence_length + split_index:self.sequence_length + len(self.X)]
 
     def build_model(self):
         inputs = Input(shape=(self.sequence_length, self.X.shape[2]))
@@ -174,11 +189,14 @@ class CryptoLSTM:
         hidden_state = self.lstm_hidden_layer.predict(data)
         return hidden_state
 
-    def run(self):
+    def run(self, manual_split=False):
         self.load_data()
         self.add_technical_indicators()
         self.preprocess_data()
-        self.train_test_split()
+        if manual_split:
+            self.manual_train_test_split()
+        else:
+            self.train_test_split()
         self.build_model()
         self.train_model()
         self.evaluate_model()
@@ -187,6 +205,6 @@ class CryptoLSTM:
 
 # Example usage
 crypto_model = CryptoLSTM(csv_path=r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
-crypto_model.run()
+crypto_model.run(manual_split=True)
 hidden_states = crypto_model.get_hidden_states(crypto_model.X)
 print(hidden_states.shape)
