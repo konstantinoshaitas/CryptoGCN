@@ -3,6 +3,8 @@ import numpy as np
 import seaborn as sns
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import MaxAbsScaler
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, LSTM, Dropout, Input
@@ -189,6 +191,60 @@ class CryptoLSTM:
         hidden_state = self.lstm_hidden_layer.predict(data)
         return hidden_state
 
+    from sklearn.decomposition import PCA
+    from sklearn.manifold import TSNE
+
+    def visualize_hidden_states(self, data):
+        hidden_states = self.get_hidden_states(data)
+
+        # Apply PCA to reduce dimensions to 2 for visualization
+        pca = PCA(n_components=2)
+        pca_result = pca.fit_transform(hidden_states)
+
+        # Alternatively, you can use t-SNE for better separation in some cases
+        tsne = TSNE(n_components=2)
+        tsne_result = tsne.fit_transform(hidden_states)
+
+        plt.figure(figsize=(12, 8))
+        plt.scatter(pca_result[:, 0], pca_result[:, 1], c=self.y, cmap='viridis')
+        plt.colorbar()
+        plt.xlabel('Principal Component 1')
+        plt.ylabel('Principal Component 2')
+        plt.title('PCA of LSTM Hidden States')
+        plt.show()
+
+        # To use t-SNE, uncomment the following lines:
+        plt.figure(figsize=(12, 8))
+        plt.scatter(tsne_result[:, 0], tsne_result[:, 1], c=self.y, cmap='viridis')
+        plt.colorbar()
+        plt.xlabel('t-SNE Component 1')
+        plt.ylabel('t-SNE Component 2')
+        plt.title('t-SNE of LSTM Hidden States')
+        plt.show()
+
+    def visualize_hidden_states_heatmap(self, data):
+        hidden_states = self.get_hidden_states(data)
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(hidden_states, cmap='viridis')
+        plt.xlabel('Hidden Units')
+        plt.ylabel('Time Steps')
+        plt.title('Heatmap of LSTM Hidden States')
+        plt.show()
+
+    def visualize_hidden_states_lineplot(self, data):
+        hidden_states = self.get_hidden_states(data)
+        plt.figure(figsize=(12, 8))
+
+        # Plot only every 5th hidden unit to reduce clutter
+        for i in range(0, hidden_states.shape[1], 5):
+            plt.plot(hidden_states[:, i], label=f'Hidden Unit {i + 1}')
+
+        plt.xlabel('Time Steps')
+        plt.ylabel('Hidden State Value')
+        plt.title('Line Plot of LSTM Hidden States')
+        plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
+        plt.show()
+
     def run(self, manual_split=False):
         self.load_data()
         self.add_technical_indicators()
@@ -203,8 +259,10 @@ class CryptoLSTM:
         self.make_predictions()
         self.display()
 
-# Example usage
+# Test usage
 crypto_model = CryptoLSTM(csv_path=r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
 crypto_model.run(manual_split=True)
 hidden_states = crypto_model.get_hidden_states(crypto_model.X)
+crypto_model.visualize_hidden_states_heatmap(crypto_model.X)
+# crypto_model.visualize_hidden_states_lineplot(crypto_model.X)
 print(hidden_states.shape)

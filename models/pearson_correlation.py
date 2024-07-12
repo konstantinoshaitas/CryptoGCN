@@ -28,12 +28,6 @@ class CorrelationMatrix:
         self.ewma_volatility = self.ewma_volatility.dropna()
 
     def calculate_denoised_correlation_matrices(self, method='returns'):
-        """
-        Calculate and denoise the Pearson correlation matrices over time.
-
-        :param method: Method to calculate correlation ('returns', 'volatility', 'ewma_volatility')
-        :return: List of denoised correlation matrices over time.
-        """
         if method == 'returns':
             data_series = self.returns
         elif method == 'volatility':
@@ -46,8 +40,17 @@ class CorrelationMatrix:
         denoised_matrices = []
         for start in range(0, len(data_series) - self.window_size + 1):
             window_data = data_series[start:start + self.window_size]
-            normalized_data = (window_data - window_data.mean()) / window_data.std()
+
+            # Normalize each column individually
+            normalized_data = (window_data - window_data.mean(axis=0)) / window_data.std(axis=0)
+
+            # Calculate the correlation matrix
             correlation_matrix = normalized_data.corr()
+
+            # Check the diagonals
+            if not np.allclose(np.diag(correlation_matrix), 1.0):
+                print("Warning: Diagonals of the correlation matrix are not 1.")
+
             denoised_matrix = self.denoise_correlation_matrix(correlation_matrix)
             denoised_matrices.append(denoised_matrix)
 
@@ -68,6 +71,7 @@ class CorrelationMatrix:
         # Replace noisy eigenvalues
         for i in range(k, len(eigenvalues)):
             eigenvalues[i] = np.mean(eigenvalues[k:])
+            # eigenvalues[i] = 0  # alternative choice for replacing noisy eigenvalues
 
         denoised_matrix = eigenvectors @ np.diag(eigenvalues) @ eigenvectors.T
         return denoised_matrix

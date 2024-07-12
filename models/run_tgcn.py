@@ -8,7 +8,7 @@ from gcn_class import CryptoGCN
 def run_tgcn(crypto_csv_paths, asset_data_csv_path):
     hidden_states_list = []
 
-    # Step 1: Process each crypto asset CSV file
+    # 1: Process each crypto asset CSV file
     for crypto_csv_path in crypto_csv_paths:
         print(f"Processing {crypto_csv_path}")
         crypto_lstm = CryptoLSTM(csv_path=crypto_csv_path)
@@ -19,7 +19,7 @@ def run_tgcn(crypto_csv_paths, asset_data_csv_path):
     # Combine hidden states from all assets
     combined_hidden_states = np.concatenate(hidden_states_list, axis=0)
 
-    # Step 2: Load multiple assets data for correlation matrix calculation
+    # 2: Load multiple assets data for correlation matrix calculation
     asset_data = pd.read_csv(asset_data_csv_path)
     correlation_matrix = CorrelationMatrix(asset_data)
 
@@ -27,21 +27,23 @@ def run_tgcn(crypto_csv_paths, asset_data_csv_path):
     correlation_matrix.calculate_returns()
     correlation_matrix.calculate_volatility()
 
-    # Step 3: Calculate denoised correlation matrices
+    # 3: Calculate denoised correlation matrices
     denoised_matrices = correlation_matrix.calculate_denoised_correlation_matrices(method='returns')
 
-    # Step 4: Apply GCN to hidden states using the denoised correlation matrices
+    # 4: Apply GCN to hidden states using the denoised correlation matrices  #TODO: WORK FROM HERE
     crypto_gcn = CryptoGCN(denoised_matrices)
     gcn_outputs = crypto_gcn.apply_gcn(combined_hidden_states)
 
     # Optionally: Implement backtesting or further analysis on gcn_outputs
     print("GCN Outputs:\n", gcn_outputs)
 
-# Example usage
+# test usage
 crypto_csv_paths = [
     r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv',
     # Add paths to other crypto asset CSV files here
 ]
-asset_data_csv_path = r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\asset_data.csv'  # Data with daily/4hr returns of all assets
+
+# Data with daily/8hr/4hr returns of all assets. Each column should represent an asset.
+asset_data_csv_path = r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\asset_data.csv'
 
 run_tgcn(crypto_csv_paths, asset_data_csv_path)
