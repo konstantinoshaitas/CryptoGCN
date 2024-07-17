@@ -5,13 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/CryptoGCN.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CryptoGCN.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/gcn_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/gcn_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/lstm_tf_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tf_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/pearson_correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/pearson_correlation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/run_tgcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run_tgcn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,26 +49,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.asset_data_csv_creation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.correlation_matrix.executor&quot;: &quot;Run&quot;,
-    &quot;Python.lstm_tensorflow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.lstm_tf_class.executor&quot;: &quot;Run&quot;,
-    &quot;Python.temporal_gcn.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/koko/Desktop/THESIS/CryptoGCN&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.LSTM_Model.executor": "Run",
+    "Python.asset_data_concat_csv.executor": "Run",
+    "Python.asset_data_csv_creation.executor": "Run",
+    "Python.correlation_matrix.executor": "Run",
+    "Python.detect_imports.executor": "Run",
+    "Python.lstm_tensorflow.executor": "Run",
+    "Python.lstm_tf_class.executor": "Run",
+    "Python.pearson_correlation.executor": "Run",
+    "Python.temporal_gcn.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/koko/Desktop/THESIS/CryptoGCN",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kosta\Desktop\THESIS\CryptoGCN" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-0509580d9d50-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.14494.241" />
+        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
       </set>
     </attachedChunks>
   </component>
@@ -180,7 +190,23 @@
       <option name="project" value="LOCAL" />
       <updated>1720566244942</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py">
+      <option name="closed" value="true" />
+      <created>1720784812449</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1720784812449</updated>
+    </task>
+    <task id="LOCAL-00014" summary="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py">
+      <option name="closed" value="true" />
+      <created>1721259517628</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1721259517628</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
