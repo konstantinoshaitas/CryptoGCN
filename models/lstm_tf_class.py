@@ -12,6 +12,7 @@ from tensorflow.keras.regularizers import l2
 import matplotlib.pyplot as plt
 import random
 
+
 class CryptoLSTM:
     def __init__(self, csv_path, sequence_length=14, num_epochs=5, random_seed=42,
                  date_col='time', target_col='close'):
@@ -36,7 +37,8 @@ class CryptoLSTM:
         df.columns = df.columns.str.lower()
         df[self.date_col] = pd.to_datetime(df[self.date_col])
         self.dates = df[self.date_col].values
-        self.date_sequences = [self.dates[i + self.sequence_length] for i in range(len(self.dates) - self.sequence_length)]
+        self.date_sequences = [self.dates[i + self.sequence_length] for i in
+                               range(len(self.dates) - self.sequence_length)]
         self.data = df.drop(columns=self.date_col)
         # print(self.data.info())
         # print(self.data.head())
@@ -73,8 +75,10 @@ class CryptoLSTM:
 
     def preprocess_data(self):
         self.data_scaled = self.scaler.fit_transform(self.data)
-        self.X, self.y = self.create_sequences(self.data_scaled, self.sequence_length, self.data.columns.get_loc(self.target_col))
-        self.X_unscaled, self.y_unscaled = self.create_sequences(self.data.values, self.sequence_length, self.data.columns.get_loc(self.target_col))
+        self.X, self.y = self.create_sequences(self.data_scaled, self.sequence_length,
+                                               self.data.columns.get_loc(self.target_col))
+        self.X_unscaled, self.y_unscaled = self.create_sequences(self.data.values, self.sequence_length,
+                                                                 self.data.columns.get_loc(self.target_col))
 
     def create_sequences(self, data, sequence_length, target_col_index):
         xs, ys = [], []
@@ -117,7 +121,8 @@ class CryptoLSTM:
         self.lstm_hidden_layer = Model(inputs=inputs, outputs=state_h)  # Model to get hidden states
 
     def train_model(self):
-        self.trained_model = self.model.fit(self.X_train, self.y_train, epochs=self.num_epochs, batch_size=32, validation_split=0.15, verbose=1)
+        self.trained_model = self.model.fit(self.X_train, self.y_train, epochs=self.num_epochs, batch_size=32,
+                                            validation_split=0.15, verbose=1)
 
     def evaluate_model(self):
         # Training performance
@@ -161,8 +166,10 @@ class CryptoLSTM:
         predicted_prices_scaled[:, self.data.columns.get_loc(self.target_col)] = self.predictions.flatten()
         true_prices_scaled = np.zeros((len(self.y_test), self.data.shape[1]))
         true_prices_scaled[:, self.data.columns.get_loc(self.target_col)] = self.y_test.flatten()
-        self.predicted_prices = self.scaler.inverse_transform(predicted_prices_scaled)[:, self.data.columns.get_loc(self.target_col)]
-        self.true_prices = self.scaler.inverse_transform(true_prices_scaled)[:, self.data.columns.get_loc(self.target_col)]
+        self.predicted_prices = self.scaler.inverse_transform(predicted_prices_scaled)[:,
+                                self.data.columns.get_loc(self.target_col)]
+        self.true_prices = self.scaler.inverse_transform(true_prices_scaled)[:,
+                           self.data.columns.get_loc(self.target_col)]
 
     def display(self):
         sns.set_style("white")
@@ -190,9 +197,6 @@ class CryptoLSTM:
     def get_hidden_states(self, data):
         hidden_state = self.lstm_hidden_layer.predict(data)
         return hidden_state
-
-    from sklearn.decomposition import PCA
-    from sklearn.manifold import TSNE
 
     def visualize_hidden_states(self, data):
         hidden_states = self.get_hidden_states(data)
@@ -259,10 +263,12 @@ class CryptoLSTM:
         self.make_predictions()
         self.display()
 
+
 # Test usage
-crypto_model = CryptoLSTM(csv_path=r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
-crypto_model.run(manual_split=True)
-hidden_states = crypto_model.get_hidden_states(crypto_model.X)
-crypto_model.visualize_hidden_states_heatmap(crypto_model.X)
-# crypto_model.visualize_hidden_states_lineplot(crypto_model.X)
-print(hidden_states.shape)
+if __name__ == "__main__":
+    crypto_model = CryptoLSTM(csv_path=r'C:\Users\Kosta\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
+    crypto_model.run(manual_split=True)
+    hidden_states = crypto_model.get_hidden_states(crypto_model.X)
+    crypto_model.visualize_hidden_states_heatmap(crypto_model.X)
+    crypto_model.visualize_hidden_states_lineplot(crypto_model.X)
+    print(hidden_states.shape)

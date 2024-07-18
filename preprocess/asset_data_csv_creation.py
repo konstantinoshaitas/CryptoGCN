@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from pathlib import Path
 
 def aggregate_asset_data(csv_files, output_file):
     """
@@ -47,13 +48,17 @@ def aggregate_asset_data(csv_files, output_file):
     aggregated_data.to_csv(output_file, index=False)
 
 # Example usage
-csv_files = [
-    r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 480_8318d.csv',
-    r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\CRYPTO_SOLUSD, 480_d942c.csv',
-    r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_ETHUSD, 480_ca04d.csv',
-    r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\CRYPTO_AAVEUSD, 480_a7ede.csv',
-    r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\CRYPTO_AVAXUSD, 480_978b1.csv'
-    # Add paths to other crypto asset CSV files here
-]
-output_file = r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\aggregated_asset_data.csv'
+# Get the directory of the current script
+script_dir = Path(__file__).resolve().parent
+
+# Construct the path to the data folder
+data_dir = script_dir / '..' / 'data' / 'correlation_data'
+
+# List all CSV files in the data directory
+csv_files = list(data_dir.glob('*.csv'))
+
+# Output file path
+output_file = data_dir / 'aggregated_asset_data.csv'
+
+# Call the function
 aggregate_asset_data(csv_files, output_file)

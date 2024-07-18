@@ -4,7 +4,6 @@ from spektral.layers import GCNConv
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 
-#test
 
 # class CryptoGCN:
 #     def __init__(self, correlation_matrices):
