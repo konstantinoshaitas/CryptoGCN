@@ -4,21 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py">
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="- created new directories&#10;- fixed pearson_correlation.py and the denoising method&#10;- adjusted file paths to relative file paths (not globally)">
       <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/CRYPTO_AAVEUSD, 480_a7ede.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/CRYPTO_AVAXUSD, 480_978b1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/CRYPTO_SOLUSD, 480_d942c.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/INDEX_BTCUSD, 480_8318d.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/INDEX_ETHUSD, 480_ca04d.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/aggregated_asset_data.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/asset_data_concat_csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocess/asset_data_concat_csv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/asset_data_csv_creation.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocess/asset_data_csv_creation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/INDEX_BTCUSD, 1D_43931.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/models/gcn_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/gcn_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/lstm_tf_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tf_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/pearson_correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/pearson_correlation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/run_tgcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run_tgcn.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,29 +49,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.asset_data_concat_csv.executor&quot;: &quot;Run&quot;,
-    &quot;Python.asset_data_csv_creation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.correlation_matrix.executor&quot;: &quot;Run&quot;,
-    &quot;Python.detect_imports.executor&quot;: &quot;Run&quot;,
-    &quot;Python.lstm_tensorflow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.lstm_tf_class.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pearson_correlation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pearson_correlation2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pearson_correlation3.executor&quot;: &quot;Run&quot;,
-    &quot;Python.temporal_gcn.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/koko/Desktop/THESIS/CryptoGCN&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.ChangelistConflict&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.LSTM_Model.executor": "Run",
+    "Python.asset_data_concat_csv.executor": "Run",
+    "Python.asset_data_csv_creation.executor": "Run",
+    "Python.correlation_matrix.executor": "Run",
+    "Python.detect_imports.executor": "Run",
+    "Python.gcn_class.executor": "Run",
+    "Python.lstm_tensorflow.executor": "Run",
+    "Python.lstm_tf_class.executor": "Run",
+    "Python.pearson_correlation.executor": "Run",
+    "Python.pearson_correlation2.executor": "Run",
+    "Python.pearson_correlation3.executor": "Run",
+    "Python.run_tgcn.executor": "Run",
+    "Python.temporal_gcn.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/koko/Desktop/THESIS/CryptoGCN",
+    "settings.editor.selected.configurable": "project.propVCSSupport.ChangelistConflict"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Kosta\Desktop\THESIS\CryptoGCN\data" />
@@ -225,7 +220,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721259579879</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="- created new directories&#10;- fixed pearson_correlation.py and the denoising method&#10;- adjusted file paths to relative file paths (not globally)">
+      <option name="closed" value="true" />
+      <created>1721344440572</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1721344440572</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -248,6 +251,7 @@
     <MESSAGE value="1. Modified LSTM&#10;2. Created LSTM Class&#10;2.1 Added methods for&#10;2.1.1 load data&#10;2.1.2 technical ind&#10;2.1.3 preprocess&#10;2.1.4 model train&#10;2.1.5 evaluation and prediction&#10;2.1.6 hidden states&#10;2.1.7 display" />
     <MESSAGE value="- Created Pearson Correlation &#10;- removed test files for correlation and for graphCN" />
     <MESSAGE value="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py" />
+    <MESSAGE value="- created new directories&#10;- fixed pearson_correlation.py and the denoising method&#10;- adjusted file paths to relative file paths (not globally)" />
+    <option name="LAST_COMMIT_MESSAGE" value="- created new directories&#10;- fixed pearson_correlation.py and the denoising method&#10;- adjusted file paths to relative file paths (not globally)" />
   </component>
 </project>

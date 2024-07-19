@@ -1,49 +1,68 @@
 import os
 import pandas as pd
-import numpy as np
 from lstm_tf_class import CryptoLSTM
 from pearson_correlation import CorrelationMatrix
 from gcn_class import CryptoGCN
 
-def run_tgcn(crypto_csv_paths, asset_data_csv_path):
-    hidden_states_list = []
+# Define paths using relative paths
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.join(script_dir, '..', 'data')
+sequential_data_dir = os.path.join(data_dir, 'sequential_data')
 
-    # 1: Process each crypto asset CSV file
-    for crypto_csv_path in crypto_csv_paths:
-        print(f"Processing {crypto_csv_path}")
-        crypto_lstm = CryptoLSTM(csv_path=crypto_csv_path)
-        crypto_lstm.run(manual_split=True)
-        hidden_states = crypto_lstm.get_hidden_states(crypto_lstm.X)
-        hidden_states_list.append(hidden_states)
+# List all CSV filenames in the sequential_data directory
+assets = [f for f in os.listdir(sequential_data_dir) if f.endswith('.csv')]
 
-    # Combine hidden states from all assets
-    combined_hidden_states = np.concatenate(hidden_states_list, axis=0)
+hidden_states = []
 
-    # 2: Load multiple assets data for correlation matrix calculation
-    asset_data = pd.read_csv(asset_data_csv_path)
-    correlation_matrix = CorrelationMatrix(asset_data)
+# Iterate over the assets to get the hidden states
+for asset in assets:
+    asset_path = os.path.join(sequential_data_dir, asset)
+    lstm_model = CryptoLSTM(csv_path=asset_path)
+    lstm_model.run(manual_split=True)
+    hidden_states_np = lstm_model.get_hidden_states(lstm_model.X)
 
-    # Calculate returns and volatility
-    correlation_matrix.calculate_returns()
-    correlation_matrix.calculate_volatility()
+    # Convert numpy array to DataFrame and add to the list
+    hidden_states_df = pd.DataFrame(hidden_states_np)
+    hidden_states.append(hidden_states_df)
 
-    # 3: Calculate denoised correlation matrices
-    denoised_matrices = correlation_matrix.calculate_denoised_correlation_matrices(method='returns')
+# Concatenate hidden states DataFrames
+hidden_states_df = pd.concat(hidden_states, axis=1)
 
-    # 4: Apply GCN to hidden states using the denoised correlation matrices  #TODO: WORK FROM HERE
-    crypto_gcn = CryptoGCN(denoised_matrices)
-    gcn_outputs = crypto_gcn.apply_gcn(combined_hidden_states)
+# Load the aggregated asset data CSV
+correlation_data_path = os.path.join(data_dir, 'correlation_data', 'aggregated_asset_data.csv')
+correlation_data = pd.read_csv(correlation_data_path, index_col=0)
 
-    # Optionally: Implement backtesting or further analysis on gcn_outputs
-    print("GCN Outputs:\n", gcn_outputs)
+# Initialize the CorrelationMatrix class
+correlation_matrix = CorrelationMatrix(correlation_data, window_size=21)
 
-# test usage
-crypto_csv_paths = [
-    r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv',
-    # Add paths to other crypto asset CSV files here
-]
+# Calculate returns
+correlation_matrix.calculate_returns()
 
-# Data with daily/8hr/4hr returns of all assets. Each column should represent an asset.
-asset_data_csv_path = r'C:\Users\koko\Desktop\THESIS\CryptoGCN\data\asset_data.csv'
+# Calculate volatility
+correlation_matrix.calculate_volatility()
 
-run_tgcn(crypto_csv_paths, asset_data_csv_path)
+# Compute rolling correlations
+correlation_matrix.compute_rolling_correlations()
+
+# Compute eigenvalues and eigenvectors
+correlation_matrix.compute_eigenvalues_eigenvectors()
+
+# Denoise the correlation matrices
+correlation_matrix.denoise_correlation_matrices()
+
+denoised_matrices = correlation_matrix.denoised_matrices
+
+# Initialize the GCN class with denoised correlation matrices
+gcn_model = CryptoGCN(denoised_matrices)
+
+# Apply the GCN to the hidden states
+gcn_outputs = gcn_model.apply_gcn(hidden_states_df.values)
+
+# Example: Perform predictions with the trained GCN model
+print(gcn_outputs)
+
+# Optionally: Save results or models
+output_dir = os.path.join(script_dir, '..', 'models')
+os.makedirs(output_dir, exist_ok=True)
+for i, output in enumerate(gcn_outputs):
+    pd.DataFrame(output).to_csv(os.path.join(output_dir, f'gcn_output_{i}.csv'))

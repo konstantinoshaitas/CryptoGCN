@@ -14,7 +14,7 @@ import random
 
 
 class CryptoLSTM:
-    def __init__(self, csv_path, sequence_length=14, num_epochs=5, random_seed=42,
+    def __init__(self, csv_path, sequence_length=14, num_epochs=1, random_seed=42,
                  date_col='time', target_col='close'):
         self.csv_path = csv_path
         self.sequence_length = sequence_length
@@ -261,7 +261,7 @@ class CryptoLSTM:
         self.train_model()
         self.evaluate_model()
         self.make_predictions()
-        self.display()
+        # self.display()
 
 
 # Test usage
@@ -269,6 +269,7 @@ if __name__ == "__main__":
     crypto_model = CryptoLSTM(csv_path=r'C:\Users\Kosta\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
     crypto_model.run(manual_split=True)
     hidden_states = crypto_model.get_hidden_states(crypto_model.X)
+    crypto_model.visualize_hidden_states(crypto_model.X)
     crypto_model.visualize_hidden_states_heatmap(crypto_model.X)
     crypto_model.visualize_hidden_states_lineplot(crypto_model.X)
     print(hidden_states.shape)

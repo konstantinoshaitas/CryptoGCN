@@ -73,6 +73,7 @@ class CorrelationMatrix:
             self.eigenvalues.append(eigvals)
             self.eigenvectors.append(eigvecs)
 
+
     def denoise_correlation_matrices(self):
         """
         Denoises the correlation matrices using Random Matrix Theory while keeping the trace unchanged.
