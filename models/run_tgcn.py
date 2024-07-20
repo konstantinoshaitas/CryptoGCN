@@ -7,7 +7,7 @@ from gcn_class import CryptoGCN
 # Define paths using relative paths
 script_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(script_dir, '..', 'data')
-sequential_data_dir = os.path.join(data_dir, 'sequential_data')
+sequential_data_dir = os.path.join(data_dir, 'processed_sequential_data')
 
 # List all CSV filenames in the sequential_data directory
 assets = [f for f in os.listdir(sequential_data_dir) if f.endswith('.csv')]
@@ -34,23 +34,7 @@ correlation_data = pd.read_csv(correlation_data_path, index_col=0)
 
 # Initialize the CorrelationMatrix class
 correlation_matrix = CorrelationMatrix(correlation_data, window_size=21)
-
-# Calculate returns
-correlation_matrix.calculate_returns()
-
-# Calculate volatility
-correlation_matrix.calculate_volatility()
-
-# Compute rolling correlations
-correlation_matrix.compute_rolling_correlations()
-
-# Compute eigenvalues and eigenvectors
-correlation_matrix.compute_eigenvalues_eigenvectors()
-
-# Denoise the correlation matrices
-correlation_matrix.denoise_correlation_matrices()
-
-denoised_matrices = correlation_matrix.denoised_matrices
+denoised_matrices = correlation_matrix.run()
 
 # Initialize the GCN class with denoised correlation matrices
 gcn_model = CryptoGCN(denoised_matrices)

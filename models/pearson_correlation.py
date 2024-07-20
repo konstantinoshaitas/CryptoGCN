@@ -5,6 +5,7 @@ import seaborn as sns
 from scipy.stats import gaussian_kde
 import os
 
+
 class CorrelationMatrix:
     def __init__(self, data, window_size=48):
         """
@@ -56,9 +57,9 @@ class CorrelationMatrix:
         """
         num_time_points = self.data.shape[0]
         window_size = self.window_size
-        num_windows = num_time_points - window_size + 1
+        num_windows = num_time_points - window_size - 1
 
-        for start in range(num_windows):
+        for start in range(1, num_windows + 1):
             end = start + window_size
             window_data = self.data.iloc[start:end]
             correlation_matrix = window_data.corr(method='pearson')
@@ -72,7 +73,6 @@ class CorrelationMatrix:
             eigvals, eigvecs = np.linalg.eigh(matrix)
             self.eigenvalues.append(eigvals)
             self.eigenvectors.append(eigvecs)
-
 
     def denoise_correlation_matrices(self):
         """
@@ -96,6 +96,7 @@ class CorrelationMatrix:
             denoised_matrix = np.clip(denoised_matrix, -1, 1)
 
             self.denoised_matrices.append(denoised_matrix)
+
 
     def plot_correlation_matrices(self, start, end):
         """
@@ -153,7 +154,18 @@ class CorrelationMatrix:
 
             plt.show()
 
-# Test usage
+    def run(self):
+        self.calculate_returns()
+        self.calculate_volatility()
+        self.compute_rolling_correlations()
+        self.compute_eigenvalues_eigenvectors()
+        self.denoise_correlation_matrices()
+        return self.denoised_matrices
+
+
+'''
+Test usage
+'''
 if __name__ == "__main__":
     # Get the directory of the current script
     script_dir = os.path.dirname(os.path.abspath(__file__))
