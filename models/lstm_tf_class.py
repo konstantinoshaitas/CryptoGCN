@@ -14,7 +14,7 @@ import random
 
 
 class CryptoLSTM:
-    def __init__(self, csv_path, sequence_length=21, num_epochs=1, random_seed=42,
+    def __init__(self, csv_path, sequence_length=21, num_epochs=5, random_seed=42,
                  date_col='time', target_col='close'):
         self.csv_path = csv_path
         self.sequence_length = sequence_length

@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="- started work on run_tgcn.py&#10;&#10;- fixed issue with calls to denoise_matrix">
-      <change afterPath="$PROJECT_DIR$/preprocess/sequential_data_process.py" afterDir="false" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="- gcn_class.py and run_tgcn.py work&#10;- added tgcn_results.py for result visualisations">
+      <change afterPath="$PROJECT_DIR$/models/tgcn_results.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/gcn_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/gcn_class.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/lstm_tf_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lstm_tf_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/pearson_correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/pearson_correlation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/run_tgcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run_tgcn.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,10 +61,12 @@
     "Python.pearson_correlation.executor": "Run",
     "Python.pearson_correlation2.executor": "Run",
     "Python.pearson_correlation3.executor": "Run",
-    "Python.run_tgcn.executor": "Debug",
+    "Python.run_tgcn.executor": "Run",
     "Python.sequential_data_process.executor": "Run",
     "Python.temporal_gcn.executor": "Run",
     "Python.test.executor": "Run",
+    "Python.testing_area.executor": "Run",
+    "Python.tgcn_results.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -80,35 +82,6 @@
       <recent name="C:\Users\Kosta\Desktop\THESIS\CryptoGCN\preprocess" />
       <recent name="C:\Users\Kosta\Desktop\THESIS\CryptoGCN" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="sequential_data_process" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="CryptoGCN" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/preprocess" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/preprocess/sequential_data_process.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.sequential_data_process" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -265,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721423815832</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="- added a preprocess script for sequential data&#10;- aligned LSTM hidden state embeddings and pearson_correlation...">
+      <option name="closed" value="true" />
+      <created>1721496126915</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1721496126915</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -290,17 +271,8 @@
     <MESSAGE value="tested up to pearson_correlation&#10;created script to join multiple asset data for correlation use in  asset_data_csv_creation.py" />
     <MESSAGE value="- created new directories&#10;- fixed pearson_correlation.py and the denoising method&#10;- adjusted file paths to relative file paths (not globally)" />
     <MESSAGE value="- started work on run_tgcn.py&#10;&#10;- fixed issue with calls to denoise_matrix" />
-    <option name="LAST_COMMIT_MESSAGE" value="- started work on run_tgcn.py&#10;&#10;- fixed issue with calls to denoise_matrix" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/models/run_tgcn.py</url>
-          <line>55</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="- added a preprocess script for sequential data&#10;- aligned LSTM hidden state embeddings and pearson_correlation..." />
+    <MESSAGE value="- gcn_class.py and run_tgcn.py work&#10;- added tgcn_results.py for result visualisations" />
+    <option name="LAST_COMMIT_MESSAGE" value="- gcn_class.py and run_tgcn.py work&#10;- added tgcn_results.py for result visualisations" />
   </component>
 </project>
