@@ -249,19 +249,29 @@ class CryptoLSTM:
         plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
         plt.show()
 
-    def run(self, manual_split=False):
+    def split_data(self, data, split_ratio=0.75):
+        split_index = int(len(data) * split_ratio)
+        return data[:split_index], data[split_index:]
+
+    def train_model(self, train_data, train_labels):
+        self.trained_model = self.model.fit(train_data, train_labels, epochs=self.num_epochs, batch_size=32,
+                                            validation_split=0.15, verbose=1)
+
+    def run(self):
         self.load_data()
         self.add_technical_indicators()
         self.preprocess_data()
-        if manual_split:
-            self.manual_train_test_split()
-        else:
-            self.train_test_split()
+
+        train_data, test_data = self.split_data(self.X)
+        train_labels, test_labels = self.split_data(self.y)
+
         self.build_model()
-        self.train_model()
-        self.evaluate_model()
-        self.make_predictions()
-        # self.display()
+        self.train_model(train_data, train_labels)
+
+        train_hidden_states = self.get_hidden_states(train_data)
+        test_hidden_states = self.get_hidden_states(test_data)
+
+        return train_hidden_states, test_hidden_states
 
 
 # Test usage

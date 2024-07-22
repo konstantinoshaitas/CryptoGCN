@@ -29,8 +29,9 @@ class GraphConvolution(Layer):
 
 
 class CryptoGCN:
-    def __init__(self, denoised_matrices):
-        self.denoised_matrices = denoised_matrices
+    def __init__(self, train_denoised_matrices, test_denoised_matrices):
+        self.train_denoised_matrices = train_denoised_matrices
+        self.test_denoised_matrices = test_denoised_matrices
 
     def build_graph(self, denoised_matrix):
         return denoised_matrix
@@ -55,14 +56,19 @@ class CryptoGCN:
         model.compile(optimizer='adam', loss='mse')
         return model
 
-    def apply_gcn(self, sequential_embeddings):
-        gcn_outputs = []
-        num_time_steps, num_assets, hidden_state_dim = sequential_embeddings.shape
+    def apply_gcn(self, train_hidden_states, test_hidden_states):
+        train_outputs = self.process_data(train_hidden_states, self.train_denoised_matrices)
+        test_outputs = self.process_data(test_hidden_states, self.test_denoised_matrices)
+        return train_outputs, test_outputs
 
-        for t, denoised_matrix in enumerate(self.denoised_matrices):
+    def process_data(self, hidden_states, denoised_matrices):
+        gcn_outputs = []
+        num_time_steps, num_assets, hidden_state_dim = hidden_states.shape
+
+        for t, denoised_matrix in enumerate(denoised_matrices):
             adjacency_matrix = self.build_graph(denoised_matrix)
             gcn_model = self.graph_convolution(num_assets, hidden_state_dim, adjacency_matrix)
-            gcn_output = gcn_model.predict([sequential_embeddings[t:t + 1], adjacency_matrix[np.newaxis, ...]])
+            gcn_output = gcn_model.predict([hidden_states[t:t + 1], adjacency_matrix[np.newaxis, ...]])
             gcn_outputs.append(gcn_output)
 
-        return gcn_outputs
+        return np.array(gcn_outputs)

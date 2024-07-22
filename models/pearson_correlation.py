@@ -78,6 +78,7 @@ class CorrelationMatrix:
         """
         Denoises the correlation matrices using Random Matrix Theory while keeping the trace unchanged.
         """
+        denoised_matrices = []
         for i, eigvals in enumerate(self.eigenvalues):
             # Filter eigenvalues
             filtered_eigvals = np.where((eigvals >= self.lambda_minus) & (eigvals <= self.lambda_plus), 0, eigvals)
@@ -95,8 +96,9 @@ class CorrelationMatrix:
             # Clip values to be within the range [-1, 1]
             denoised_matrix = np.clip(denoised_matrix, -1, 1)
 
-            self.denoised_matrices.append(denoised_matrix)
+            denoised_matrices.append(denoised_matrix)
 
+        return denoised_matrices
 
     def plot_correlation_matrices(self, start, end):
         """
@@ -159,8 +161,26 @@ class CorrelationMatrix:
         self.calculate_volatility()
         self.compute_rolling_correlations()
         self.compute_eigenvalues_eigenvectors()
-        self.denoise_correlation_matrices()
-        return self.denoised_matrices
+
+        # Split the data
+        split_index = int(len(self.original_matrices) * 0.75)
+
+        # Compute eigenvalues and eigenvectors for train and test separately
+        self.eigenvalues_train = self.eigenvalues[:split_index]
+        self.eigenvalues_test = self.eigenvalues[split_index:]
+        self.eigenvectors_train = self.eigenvectors[:split_index]
+        self.eigenvectors_test = self.eigenvectors[split_index:]
+
+        # Denoise train and test matrices separately
+        self.eigenvalues = self.eigenvalues_train
+        self.eigenvectors = self.eigenvectors_train
+        train_denoised = self.denoise_correlation_matrices()
+
+        self.eigenvalues = self.eigenvalues_test
+        self.eigenvectors = self.eigenvectors_test
+        test_denoised = self.denoise_correlation_matrices()
+
+        return train_denoised, test_denoised
 
 
 '''

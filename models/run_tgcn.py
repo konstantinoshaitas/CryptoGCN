@@ -16,65 +16,51 @@ sequential_data_dir = os.path.join(data_dir, 'processed_sequential_data')
 results_dir = os.path.join(data_dir, 'tgcn_results')
 os.makedirs(results_dir, exist_ok=True)
 
-
 # List all CSV filenames in the sequential_data directory
 assets = [f for f in os.listdir(sequential_data_dir) if f.endswith('.csv')]
 
-'''
-2. LSTM_EMBEDDING - GRAPH NODES
-'''
+# Process LSTM data
+train_hidden_states = []
+test_hidden_states = []
 
-hidden_states = []
-
-# Iterate over the assets to get the hidden states
 for asset in assets:
     asset_path = os.path.join(sequential_data_dir, asset)
-    lstm_model = CryptoLSTM(csv_path=asset_path, num_epochs=5)
-    lstm_model.run(manual_split=True)
-    hidden_states_np = lstm_model.get_hidden_states(lstm_model.X)
-    hidden_states.append(hidden_states_np)
+    lstm_model = CryptoLSTM(csv_path=asset_path)
+    train_hs, test_hs = lstm_model.run()
+    train_hidden_states.append(train_hs)
+    test_hidden_states.append(test_hs)
 
-# Convert list of hidden states to a numpy array
-hidden_states = np.array(hidden_states)  # Shape: (num_assets, num_time_steps, hidden_state_dim)
-print(hidden_states.shape)
-hidden_states = np.transpose(hidden_states, (1, 0, 2))  # Shape: (num_time_steps, num_assets, hidden_state_dim)
+train_hidden_states = np.array(train_hidden_states)
+test_hidden_states = np.array(test_hidden_states)
 
-print(f"Hidden states shape: {hidden_states.shape}")
+# Transpose the hidden states to match the expected shape
+train_hidden_states = np.transpose(train_hidden_states, (1, 0, 2))
+test_hidden_states = np.transpose(test_hidden_states, (1, 0, 2))
 
-'''
-3. DENOISED PEARSON CORRELATION - GRAPH EDGES
-'''
+# Process correlation data
 correlation_data_dir = os.path.join(data_dir, 'correlation_data', 'aggregated_asset_data.csv')
 correlation_data = pd.read_csv(correlation_data_dir, index_col=0)
 
 correlation_matrix = CorrelationMatrix(correlation_data, window_size=21)
-denoised_matrices = correlation_matrix.run()
+train_denoised, test_denoised = correlation_matrix.run()
 
-# Ensure denoised_matrices match the number of time steps in hidden_states
-num_time_steps = hidden_states.shape[0]
-denoised_matrices = denoised_matrices[:num_time_steps]
+# Apply GCN
+gcn_model = CryptoGCN(train_denoised, test_denoised)
+train_gcn_outputs, test_gcn_outputs = gcn_model.apply_gcn(train_hidden_states, test_hidden_states)
 
-print(f"Number of denoised matrices: {len(denoised_matrices)}")
-print(f"Shape of first denoised matrix: {denoised_matrices[0].shape}")
 
-'''
-4. TEMPORAL GRAPH MODEL
-'''
-gcn_model = CryptoGCN(denoised_matrices)
-gcn_outputs = gcn_model.apply_gcn(hidden_states)
+# Generate rankings
+def generate_rankings(outputs):
+    return np.argsort(outputs.squeeze(), axis=1)[::-1]
 
-# Rank predictions for each time step
-rankings = []
-for output in gcn_outputs:
-    ranking = np.argsort(output.flatten())[::-1]
-    rankings.append(ranking)
 
-'''
-5. RESULTS ETC...
-'''
-output_dir = os.path.join(script_dir, '..', 'models')
-os.makedirs(output_dir, exist_ok=True)
-np.save(os.path.join(results_dir, 'gcn_outputs.npy'), gcn_outputs)
-np.save(os.path.join(results_dir, 'rankings.npy'), rankings)
+train_rankings = generate_rankings(train_gcn_outputs)
+test_rankings = generate_rankings(test_gcn_outputs)
+
+# Save results
+np.save(os.path.join(results_dir, 'train_gcn_outputs.npy'), train_gcn_outputs)
+np.save(os.path.join(results_dir, 'test_gcn_outputs.npy'), test_gcn_outputs)
+np.save(os.path.join(results_dir, 'train_rankings.npy'), train_rankings)
+np.save(os.path.join(results_dir, 'test_rankings.npy'), test_rankings)
 
 print("GCN outputs and rankings have been saved in:", results_dir)
