@@ -11,6 +11,7 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, Input
 from tensorflow.keras.regularizers import l2
 import matplotlib.pyplot as plt
 import random
+import os
 
 
 class CryptoLSTM:
@@ -120,8 +121,13 @@ class CryptoLSTM:
         self.model.compile(optimizer='adam', loss='mean_squared_error')
         self.lstm_hidden_layer = Model(inputs=inputs, outputs=state_h)  # Model to get hidden states
 
-    def train_model(self):
-        self.trained_model = self.model.fit(self.X_train, self.y_train, epochs=self.num_epochs, batch_size=32,
+    def split_data(self, data, split_ratio=0.75):
+        split_index = int(len(data) * split_ratio)
+
+        return data[:split_index], data[split_index:]
+
+    def train_model(self, train_data, train_labels):
+        self.trained_model = self.model.fit(train_data, train_labels, epochs=self.num_epochs, batch_size=32,
                                             validation_split=0.15, verbose=1)
 
     def evaluate_model(self):
@@ -176,7 +182,8 @@ class CryptoLSTM:
         sns.set_context("talk", font_scale=.8)
         palette = sns.color_palette()
 
-        plt.figure(figsize=(12, 8))
+        # Plot training and validation loss
+        plt.figure(figsize=(12, 6))
         plt.plot(self.trained_model.history['loss'], label='Training Loss')
         plt.plot(self.trained_model.history['val_loss'], label='Validation Loss')
         plt.xlabel('Epochs')
@@ -185,22 +192,41 @@ class CryptoLSTM:
         plt.title('Training and Validation Loss')
         plt.show()
 
-        plt.figure(figsize=(12, 8))
-        plt.xlabel('Dates', fontsize=13, fontweight='bold', labelpad=12)
-        plt.ylabel('Prices', fontsize=13, fontweight='bold', labelpad=12)
-        plt.plot(self.test_dates, self.predicted_prices, label='Predicted Prices', color=palette[4], linestyle='--')
-        plt.plot(self.test_dates, self.y_true, label='Actual Prices', color=palette[0])
-        plt.title('Predicted vs True Prices')
+        # Get train and test data
+        _, test_data = self.split_data(self.X)
+        _, test_labels = self.split_data(self.y)
+
+        # Make predictions on test data
+        test_predictions = self.model.predict(test_data)
+
+        # Inverse transform predictions and actual values
+        test_predictions_unscaled = self.scaler.inverse_transform(
+            np.column_stack((np.zeros((len(test_predictions), self.data.shape[1] - 1)), test_predictions))
+        )[:, -1]
+        y_test_unscaled = self.scaler.inverse_transform(
+            np.column_stack((np.zeros((len(test_labels), self.data.shape[1] - 1)), test_labels.reshape(-1, 1)))
+        )[:, -1]
+
+        # Get dates for test data
+        _, test_dates = self.split_data(self.dates[self.sequence_length:])
+
+        # Plot predictions vs actual values
+        plt.figure(figsize=(12, 6))
+        plt.plot(test_dates, y_test_unscaled, label='Actual Prices', color=palette[0])
+        plt.plot(test_dates, test_predictions_unscaled, label='Predicted Prices', color=palette[4], linestyle='--')
+        plt.xlabel('Date')
+        plt.ylabel('Price')
+        plt.title('Predicted vs Actual Prices (Test Set)')
         plt.legend()
+        plt.xticks(rotation=45)
+        plt.tight_layout()
         plt.show()
 
     def get_hidden_states(self, data):
         hidden_state = self.lstm_hidden_layer.predict(data)
         return hidden_state
 
-    def visualize_hidden_states(self, data):
-        hidden_states = self.get_hidden_states(data)
-
+    def visualize_hidden_states(self, hidden_states):
         # Apply PCA to reduce dimensions to 2 for visualization
         pca = PCA(n_components=2)
         pca_result = pca.fit_transform(hidden_states)
@@ -209,25 +235,26 @@ class CryptoLSTM:
         tsne = TSNE(n_components=2)
         tsne_result = tsne.fit_transform(hidden_states)
 
+        # Create a color gradient based on the time steps
+        color = np.arange(hidden_states.shape[0])
+
         plt.figure(figsize=(12, 8))
-        plt.scatter(pca_result[:, 0], pca_result[:, 1], c=self.y, cmap='viridis')
-        plt.colorbar()
+        scatter = plt.scatter(pca_result[:, 0], pca_result[:, 1], c=color, cmap='viridis')
+        plt.colorbar(scatter, label='Time Step')
         plt.xlabel('Principal Component 1')
         plt.ylabel('Principal Component 2')
         plt.title('PCA of LSTM Hidden States')
         plt.show()
 
-        # To use t-SNE, uncomment the following lines:
         plt.figure(figsize=(12, 8))
-        plt.scatter(tsne_result[:, 0], tsne_result[:, 1], c=self.y, cmap='viridis')
-        plt.colorbar()
+        scatter = plt.scatter(tsne_result[:, 0], tsne_result[:, 1], c=color, cmap='viridis')
+        plt.colorbar(scatter, label='Time Step')
         plt.xlabel('t-SNE Component 1')
         plt.ylabel('t-SNE Component 2')
         plt.title('t-SNE of LSTM Hidden States')
         plt.show()
 
-    def visualize_hidden_states_heatmap(self, data):
-        hidden_states = self.get_hidden_states(data)
+    def visualize_hidden_states_heatmap(self, hidden_states):
         plt.figure(figsize=(12, 8))
         sns.heatmap(hidden_states, cmap='viridis')
         plt.xlabel('Hidden Units')
@@ -235,8 +262,7 @@ class CryptoLSTM:
         plt.title('Heatmap of LSTM Hidden States')
         plt.show()
 
-    def visualize_hidden_states_lineplot(self, data):
-        hidden_states = self.get_hidden_states(data)
+    def visualize_hidden_states_lineplot(self, hidden_states):
         plt.figure(figsize=(12, 8))
 
         # Plot only every 5th hidden unit to reduce clutter
@@ -248,14 +274,6 @@ class CryptoLSTM:
         plt.title('Line Plot of LSTM Hidden States')
         plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1))
         plt.show()
-
-    def split_data(self, data, split_ratio=0.75):
-        split_index = int(len(data) * split_ratio)
-        return data[:split_index], data[split_index:]
-
-    def train_model(self, train_data, train_labels):
-        self.trained_model = self.model.fit(train_data, train_labels, epochs=self.num_epochs, batch_size=32,
-                                            validation_split=0.15, verbose=1)
 
     def run(self):
         self.load_data()
@@ -276,10 +294,16 @@ class CryptoLSTM:
 
 # Test usage
 if __name__ == "__main__":
-    crypto_model = CryptoLSTM(csv_path=r'C:\Users\Kosta\Desktop\THESIS\CryptoGCN\data\INDEX_BTCUSD, 1D_43931.csv')
-    crypto_model.run(manual_split=True)
-    hidden_states = crypto_model.get_hidden_states(crypto_model.X)
-    crypto_model.visualize_hidden_states(crypto_model.X)
-    crypto_model.visualize_hidden_states_heatmap(crypto_model.X)
-    crypto_model.visualize_hidden_states_lineplot(crypto_model.X)
-    print(hidden_states.shape)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(script_dir, '..', 'data')
+    sequential_data_dir = os.path.join(data_dir, 'processed_sequential_data')
+    asset_path = os.path.join(sequential_data_dir, 'processed_ETH8HR.csv')
+    crypto_model = CryptoLSTM(csv_path=asset_path)
+    train_hidden_states, test_hidden_states = crypto_model.run()
+    crypto_model.display()
+
+    # Visualize hidden states
+    crypto_model.visualize_hidden_states(test_hidden_states)
+    crypto_model.visualize_hidden_states_heatmap(test_hidden_states)
+    crypto_model.visualize_hidden_states_lineplot(test_hidden_states)
+    print(test_hidden_states.shape)

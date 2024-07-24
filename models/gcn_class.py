@@ -32,11 +32,12 @@ class CryptoGCN:
     def __init__(self, train_denoised_matrices, test_denoised_matrices):
         self.train_denoised_matrices = train_denoised_matrices
         self.test_denoised_matrices = test_denoised_matrices
+        self.model = None
 
     def build_graph(self, denoised_matrix):
         return denoised_matrix
 
-    def graph_convolution(self, num_assets, hidden_state_dim, adjacency_matrix):
+    def graph_convolution(self, num_assets, hidden_state_dim):
         X_input = Input(shape=(num_assets, hidden_state_dim))
         A_input = Input(shape=(num_assets, num_assets))
 
@@ -56,19 +57,31 @@ class CryptoGCN:
         model.compile(optimizer='adam', loss='mse')
         return model
 
-    def apply_gcn(self, train_hidden_states, test_hidden_states):
-        train_outputs = self.process_data(train_hidden_states, self.train_denoised_matrices)
-        test_outputs = self.process_data(test_hidden_states, self.test_denoised_matrices)
+    def apply_gcn(self, train_hidden_states, test_hidden_states, batch_size=32):
+        num_time_steps, num_assets, hidden_state_dim = train_hidden_states.shape
+
+        # Build and compile the model only once
+        self.model = self.graph_convolution(num_assets, hidden_state_dim)
+
+        train_outputs = self.process_data(train_hidden_states, self.train_denoised_matrices, batch_size)
+        test_outputs = self.process_data(test_hidden_states, self.test_denoised_matrices, batch_size)
         return train_outputs, test_outputs
 
-    def process_data(self, hidden_states, denoised_matrices):
+    def process_data(self, hidden_states, denoised_matrices, batch_size):
+        num_time_steps = len(hidden_states)
         gcn_outputs = []
-        num_time_steps, num_assets, hidden_state_dim = hidden_states.shape
 
-        for t, denoised_matrix in enumerate(denoised_matrices):
-            adjacency_matrix = self.build_graph(denoised_matrix)
-            gcn_model = self.graph_convolution(num_assets, hidden_state_dim, adjacency_matrix)
-            gcn_output = gcn_model.predict([hidden_states[t:t + 1], adjacency_matrix[np.newaxis, ...]])
-            gcn_outputs.append(gcn_output)
+        for i in range(0, num_time_steps, batch_size):
+            batch_end = min(i + batch_size, num_time_steps)
+            batch_hidden_states = hidden_states[i:batch_end]
+            batch_matrices = denoised_matrices[i:batch_end]
+
+            # Prepare inputs for the batch
+            X_batch = np.array(batch_hidden_states)
+            A_batch = np.array([self.build_graph(matrix) for matrix in batch_matrices])
+
+            # Predict for the batch
+            batch_outputs = self.model.predict([X_batch, A_batch], verbose=0)
+            gcn_outputs.extend(batch_outputs)
 
         return np.array(gcn_outputs)

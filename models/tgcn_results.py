@@ -4,6 +4,7 @@ import os
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import networkx as nx
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
@@ -30,6 +31,7 @@ print("Test Rankings min and max:", test_rankings.min(), test_rankings.max())
 print("Unique train ranking values:", np.unique(train_rankings))
 print("Unique test ranking values:", np.unique(test_rankings))
 
+
 def plot_rankings(rankings, title):
     crypto_index = 7  # Change this to look at different cryptocurrencies
     plt.figure(figsize=(12, 6))
@@ -39,8 +41,10 @@ def plot_rankings(rankings, title):
     plt.ylabel("Rank")
     plt.show()
 
+
 plot_rankings(train_rankings, "Train")
 plot_rankings(test_rankings, "Test")
+
 
 def plot_rank_distributions_over_time(rankings, save_dir, segment_size=100, title_prefix=""):
     num_segments = len(rankings) // segment_size
@@ -61,11 +65,13 @@ def plot_rank_distributions_over_time(rankings, save_dir, segment_size=100, titl
         plt.ylim(0, num_cryptos)
         plt.tight_layout()
 
-        save_path = os.path.join(save_dir, f"{title_prefix.lower().replace(' ', '_')}_rank_distribution_segment_{i + 1}.png")
+        save_path = os.path.join(save_dir,
+                                 f"{title_prefix.lower().replace(' ', '_')}_rank_distribution_segment_{i + 1}.png")
         plt.savefig(save_path)
         plt.close()
 
     print(f"Created {num_segments} visualizations in {save_dir}")
+
 
 def plot_rankings_line_over_time(rankings, save_dir, segment_size=500, title_prefix=""):
     num_segments = len(rankings) // segment_size
@@ -89,20 +95,22 @@ def plot_rankings_line_over_time(rankings, save_dir, segment_size=500, title_pre
         plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
         plt.tight_layout()
 
-        save_path = os.path.join(save_dir, f"{title_prefix.lower().replace(' ', '_')}_rankings_line_segment_{i + 1}.png")
+        save_path = os.path.join(save_dir,
+                                 f"{title_prefix.lower().replace(' ', '_')}_rankings_line_segment_{i + 1}.png")
         plt.savefig(save_path)
         plt.close()
 
     print(f"Created {num_segments} line plot visualizations in {save_dir}")
 
+
+
 # Line plot of ranking over time
 save_directory = os.path.join(data_dir, results_dir, 'ranking_line_plots')
 plot_rankings_line_over_time(train_rankings, save_directory, segment_size=20, title_prefix="Train")
-plot_rankings_line_over_time(test_rankings, save_directory, segment_size=20, title_prefix="Test")
+plot_rankings_line_over_time(test_rankings, save_directory, segment_size=5, title_prefix="Test")
 
 # Rank distribution box plot over time
 save_directory = os.path.join(data_dir, results_dir, 'ranking_distribution')
 plot_rank_distributions_over_time(train_rankings, save_directory, segment_size=20, title_prefix="Train")
-plot_rank_distributions_over_time(test_rankings, save_directory, segment_size=20, title_prefix="Test")
+plot_rank_distributions_over_time(test_rankings, save_directory, segment_size=5, title_prefix="Test")
 
-# Further visualizations or analyses here as needed

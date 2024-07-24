@@ -105,34 +105,66 @@ class CorrelationMatrix:
         Plots the original and denoised correlation matrices side by side for the specified range of indices.
         """
         for idx in range(start, end):
-            if idx >= len(self.original_matrices) or idx >= len(self.denoised_matrices):
-                print(f"Index {idx} is out of bounds. Skipping.")
+            if idx >= len(self.original_matrices_train):
+                print(f"Index {idx} is out of bounds for train data. Skipping.")
                 continue
 
-            original_matrix = self.original_matrices[idx]
-            denoised_matrix = self.denoised_matrices[idx]
+            original_matrix = self.original_matrices_train[idx]
+            denoised_matrix = self.train_denoised[idx]
 
-            fig, axes = plt.subplots(1, 2, figsize=(14, 7))
-            sns.heatmap(original_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=axes[0],
-                        xticklabels=self.data.columns, yticklabels=self.data.columns, vmin=-1, vmax=1)
-            axes[0].set_title(f'Original Correlation Matrix (Index {idx})')
+            fig, axes = plt.subplots(1, 2, figsize=(20, 8))
+            sns.heatmap(original_matrix, annot=False, fmt=".2f", cmap='coolwarm', ax=axes[0],
+                        xticklabels=False, yticklabels=False, vmin=-1, vmax=1)
+            axes[0].set_title(f'Original Correlation Matrix (Train Index {idx})')
 
-            sns.heatmap(denoised_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=axes[1],
-                        xticklabels=self.data.columns, yticklabels=self.data.columns, vmin=-1, vmax=1)
-            axes[1].set_title(f'Denoised Correlation Matrix (Index {idx})')
+            sns.heatmap(denoised_matrix, annot=False, fmt=".2f", cmap='coolwarm', ax=axes[1],
+                        xticklabels=False, yticklabels=False, vmin=-1, vmax=1)
+            axes[1].set_title(f'Denoised Correlation Matrix (Train Index {idx})')
 
+            plt.tight_layout()
             plt.show()
+
+        # Plot test matrices if the range extends beyond train data
+        if end > len(self.original_matrices_train):
+            test_start = max(0, start - len(self.original_matrices_train))
+            test_end = end - len(self.original_matrices_train)
+
+            for idx in range(test_start, test_end):
+                if idx >= len(self.original_matrices_test):
+                    print(f"Index {idx} is out of bounds for test data. Skipping.")
+                    continue
+
+                original_matrix = self.original_matrices_test[idx]
+                denoised_matrix = self.test_denoised[idx]
+
+                fig, axes = plt.subplots(1, 2, figsize=(20, 8))
+                sns.heatmap(original_matrix, annot=False, fmt=".2f", cmap='coolwarm', ax=axes[0],
+                            xticklabels=False, yticklabels=False, vmin=-1, vmax=1)
+                axes[0].set_title(f'Original Correlation Matrix (Test Index {idx})')
+
+                sns.heatmap(denoised_matrix, annot=False, fmt=".2f", cmap='coolwarm', ax=axes[1],
+                            xticklabels=False, yticklabels=False, vmin=-1, vmax=1)
+                axes[1].set_title(f'Denoised Correlation Matrix (Test Index {idx})')
+
+                plt.tight_layout()
+                plt.show()
 
     def plot_eigenvalue_distribution(self, start, end):
         """
         Plots the density distribution of eigenvalues and compares them with the Marcenko-Pastur distribution.
+        Only shows eigenvalues of non-denoised matrices.
         """
         for idx in range(start, end):
-            if idx >= len(self.eigenvalues):
+            if idx < len(self.eigenvalues_train):
+                eigvals = self.eigenvalues_train[idx]
+                title_prefix = "Train"
+            elif idx < len(self.eigenvalues_train) + len(self.eigenvalues_test):
+                eigvals = self.eigenvalues_test[idx - len(self.eigenvalues_train)]
+                title_prefix = "Test"
+            else:
                 print(f"Index {idx} is out of bounds. Skipping.")
                 continue
 
-            eigvals = self.eigenvalues[idx]
             density = gaussian_kde(eigvals)
             x = np.linspace(min(eigvals), max(eigvals), 1000)
             y = density(x)
@@ -149,11 +181,12 @@ class CorrelationMatrix:
             ax.axvline(self.lambda_minus, color='yellow', linestyle='--', label='λ-')
             ax.axvline(self.lambda_plus, color='green', linestyle='--', label='λ+')
 
-            ax.set_title(f'Eigenvalue Distribution for Matrix {idx + 1}')
+            ax.set_title(f'Eigenvalue Distribution for {title_prefix} Matrix {idx + 1}')
             ax.set_xlabel('Eigenvalues')
             ax.set_ylabel('Density Distribution')
             ax.legend()
 
+            plt.tight_layout()
             plt.show()
 
     def run(self):
@@ -165,6 +198,9 @@ class CorrelationMatrix:
         # Split the data
         split_index = int(len(self.original_matrices) * 0.75)
 
+        self.original_matrices_train = self.original_matrices[:split_index]
+        self.original_matrices_test = self.original_matrices[split_index:]
+
         # Compute eigenvalues and eigenvectors for train and test separately
         self.eigenvalues_train = self.eigenvalues[:split_index]
         self.eigenvalues_test = self.eigenvalues[split_index:]
@@ -175,10 +211,12 @@ class CorrelationMatrix:
         self.eigenvalues = self.eigenvalues_train
         self.eigenvectors = self.eigenvectors_train
         train_denoised = self.denoise_correlation_matrices()
+        self.train_denoised = train_denoised
 
         self.eigenvalues = self.eigenvalues_test
         self.eigenvectors = self.eigenvectors_test
         test_denoised = self.denoise_correlation_matrices()
+        self.test_denoised = test_denoised
 
         return train_denoised, test_denoised
 
@@ -200,25 +238,11 @@ if __name__ == "__main__":
     # Initialize CorrelationMatrix object with a window size of 21
     corr_matrix = CorrelationMatrix(data, window_size=21)
 
-    # Calculate returns and volatility
-    corr_matrix.calculate_returns()
-    corr_matrix.calculate_volatility()
+    # Run the correlation matrix calculations
+    train_denoised, test_denoised = corr_matrix.run()
 
-    # Compute rolling correlations
-    corr_matrix.compute_rolling_correlations()
+    # Plot eigenvalue distribution before de-noising
+    corr_matrix.plot_eigenvalue_distribution(start=3000, end=3002)
 
-    # Compute eigenvalues and eigenvectors
-    corr_matrix.compute_eigenvalues_eigenvectors()
-
-    # Index Range
-    start = 0
-    end = 3
-
-    # Plot the eigenvalue distribution before denoising
-    corr_matrix.plot_eigenvalue_distribution(start=start, end=end)
-
-    # Denoise the correlation matrices
-    corr_matrix.denoise_correlation_matrices()
-
-    # Plot the correlation matrices for the specified range
-    corr_matrix.plot_correlation_matrices(start=start, end=end)
+    # Plot correlation matrices vs denoised matrices
+    corr_matrix.plot_correlation_matrices(start=3000, end=3002)

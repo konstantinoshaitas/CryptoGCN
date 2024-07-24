@@ -4,6 +4,7 @@ import pandas as pd
 from lstm_tf_class import CryptoLSTM
 from pearson_correlation import CorrelationMatrix
 from gcn_class import CryptoGCN
+from gcn_visualizer import GCNVisualizer
 
 '''
 1. LOAD DATA
@@ -25,6 +26,7 @@ test_hidden_states = []
 
 for asset in assets:
     asset_path = os.path.join(sequential_data_dir, asset)
+    print(f'Evaluating hidden states for: {asset_path}')
     lstm_model = CryptoLSTM(csv_path=asset_path)
     train_hs, test_hs = lstm_model.run()
     train_hidden_states.append(train_hs)
@@ -43,10 +45,17 @@ correlation_data = pd.read_csv(correlation_data_dir, index_col=0)
 
 correlation_matrix = CorrelationMatrix(correlation_data, window_size=21)
 train_denoised, test_denoised = correlation_matrix.run()
+# correlation_matrix.plot_correlation_matrices(start=3000, end=3002)
+# Visualize a single graph
+GCNVisualizer.visualize_graph(test_denoised[0], save_path=os.path.join(results_dir, 'gcn_graph.png'))
+
+# Visualize graph over time
+# GCNVisualizer.visualize_graph_over_time(train_denoised, interval=100,
+#                                         save_path=os.path.join(results_dir, 'gcn_graph_time'))
 
 # Apply GCN
 gcn_model = CryptoGCN(train_denoised, test_denoised)
-train_gcn_outputs, test_gcn_outputs = gcn_model.apply_gcn(train_hidden_states, test_hidden_states)
+train_gcn_outputs, test_gcn_outputs = gcn_model.apply_gcn(train_hidden_states, test_hidden_states, batch_size=16)
 
 
 # Generate rankings
