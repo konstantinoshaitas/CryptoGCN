@@ -103,7 +103,6 @@ def plot_rankings_line_over_time(rankings, save_dir, segment_size=500, title_pre
     print(f"Created {num_segments} line plot visualizations in {save_dir}")
 
 
-
 # Line plot of ranking over time
 save_directory = os.path.join(data_dir, results_dir, 'ranking_line_plots')
 plot_rankings_line_over_time(train_rankings, save_directory, segment_size=20, title_prefix="Train")
@@ -113,4 +112,3 @@ plot_rankings_line_over_time(test_rankings, save_directory, segment_size=5, titl
 save_directory = os.path.join(data_dir, results_dir, 'ranking_distribution')
 plot_rank_distributions_over_time(train_rankings, save_directory, segment_size=20, title_prefix="Train")
 plot_rank_distributions_over_time(test_rankings, save_directory, segment_size=5, title_prefix="Test")
-

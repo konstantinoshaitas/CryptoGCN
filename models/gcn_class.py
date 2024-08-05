@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Layer
+from tensorflow.keras.optimizers import Adam
 import numpy as np
 
 
@@ -28,60 +29,100 @@ class GraphConvolution(Layer):
         return self.activation(output) if self.activation is not None else output
 
 
-class CryptoGCN:
-    def __init__(self, train_denoised_matrices, test_denoised_matrices):
-        self.train_denoised_matrices = train_denoised_matrices
-        self.test_denoised_matrices = test_denoised_matrices
-        self.model = None
+class CryptoGCN(Model):
+    def __init__(self, num_assets, hidden_state_dim):
+        super(CryptoGCN, self).__init__()
+        self.gcn1 = GraphConvolution(64, activation='relu')
+        self.gcn2 = GraphConvolution(32, activation='relu')
+        self.flatten = tf.keras.layers.Flatten()
+        self.dense = Dense(num_assets, activation='linear')
+        self.alpha = 0.5  # Hyperparameter to balance pointwise and pairwise loss
+        self.mse_loss = tf.keras.losses.MeanSquaredError()
 
-    def build_graph(self, denoised_matrix):
-        return denoised_matrix
+    def call(self, inputs):
+        X, A = inputs
+        x = self.gcn1([X, A])
+        x = self.gcn2([x, A])
+        x = self.flatten(x)
+        return self.dense(x)
 
-    def graph_convolution(self, num_assets, hidden_state_dim):
-        X_input = Input(shape=(num_assets, hidden_state_dim))
-        A_input = Input(shape=(num_assets, num_assets))
+    def train_step(self, data):
+        X, A, y_true = data
 
-        # First GCN layer
-        gcn_output = GraphConvolution(64, activation='relu')([X_input, A_input])
+        with tf.GradientTape() as tape:
+            y_pred = self([X, A], training=True)
+            loss = self.combined_loss(y_true, y_pred)
 
-        # Second GCN layer
-        gcn_output = GraphConvolution(32, activation='relu')([gcn_output, A_input])
+        gradients = tape.gradient(loss, self.trainable_variables)
+        self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
 
-        # Flatten the output
-        gcn_output = tf.keras.layers.Flatten()(gcn_output)
+        return {"loss": loss}
 
-        # Final dense layer for ranking scores
-        output = Dense(num_assets, activation='linear')(gcn_output)
+    def test_step(self, data):
+        X, A, y_true = data
+        y_pred = self([X, A], training=False)
+        loss = self.combined_loss(y_true, y_pred)
+        return {"loss": loss}
 
-        model = Model(inputs=[X_input, A_input], outputs=output)
-        model.compile(optimizer='adam', loss='mse')
-        return model
+    def combined_loss(self, y_true, y_pred):
+        pointwise_loss = self.mse_loss(y_true, y_pred)
+        pairwise_loss = self.pairwise_ranking_loss(y_true, y_pred)
+        return pointwise_loss + self.alpha * pairwise_loss
 
-    def apply_gcn(self, train_hidden_states, test_hidden_states, batch_size=32):
-        num_time_steps, num_assets, hidden_state_dim = train_hidden_states.shape
+    def pairwise_ranking_loss(self, y_true, y_pred):
+        # Ensure y_true and y_pred are 2D and float32
+        y_true = tf.cast(tf.reshape(y_true, [-1, y_true.shape[-1]]), tf.float32)
+        y_pred = tf.cast(tf.reshape(y_pred, [-1, y_pred.shape[-1]]), tf.float32)
 
-        # Build and compile the model only once
-        self.model = self.graph_convolution(num_assets, hidden_state_dim)
+        diff_true = y_true[:, :, None] - y_true[:, None, :]
+        diff_pred = y_pred[:, :, None] - y_pred[:, None, :]
 
-        train_outputs = self.process_data(train_hidden_states, self.train_denoised_matrices, batch_size)
-        test_outputs = self.process_data(test_hidden_states, self.test_denoised_matrices, batch_size)
-        return train_outputs, test_outputs
+        loss = tf.maximum(tf.constant(0, dtype=tf.float32),
+                          -tf.sign(diff_true) * diff_pred + tf.constant(0.1, dtype=tf.float32))
+        return tf.reduce_mean(loss)
 
-    def process_data(self, hidden_states, denoised_matrices, batch_size):
-        num_time_steps = len(hidden_states)
-        gcn_outputs = []
 
-        for i in range(0, num_time_steps, batch_size):
-            batch_end = min(i + batch_size, num_time_steps)
-            batch_hidden_states = hidden_states[i:batch_end]
-            batch_matrices = denoised_matrices[i:batch_end]
+def apply_gcn(train_hidden_states, test_hidden_states, train_denoised_matrices, test_denoised_matrices, train_y,
+              test_y):
+    print("Shape of train_hidden_states:", train_hidden_states.shape)
+    print("Shape of train_denoised_matrices:", train_denoised_matrices.shape)
+    print("Shape of train_y:", train_y.shape)
+    print("Shape of test_hidden_states:", test_hidden_states.shape)
+    print("Shape of test_denoised_matrices:", test_denoised_matrices.shape)
+    print("Shape of test_y:", test_y.shape)
 
-            # Prepare inputs for the batch
-            X_batch = np.array(batch_hidden_states)
-            A_batch = np.array([self.build_graph(matrix) for matrix in batch_matrices])
+    num_time_steps, num_assets, hidden_state_dim = train_hidden_states.shape
 
-            # Predict for the batch
-            batch_outputs = self.model.predict([X_batch, A_batch], verbose=0)
-            gcn_outputs.extend(batch_outputs)
+    model = CryptoGCN(num_assets, hidden_state_dim)
+    model.compile(optimizer=Adam(learning_rate=0.001))
 
-        return np.array(gcn_outputs)
+    # Custom training loop
+    batch_size = 32
+    epochs = 10
+    train_dataset = tf.data.Dataset.from_tensor_slices((train_hidden_states, train_denoised_matrices, train_y)) \
+        .batch(batch_size).repeat().prefetch(tf.data.AUTOTUNE)
+    test_dataset = tf.data.Dataset.from_tensor_slices((test_hidden_states, test_denoised_matrices, test_y)) \
+        .batch(batch_size).repeat().prefetch(tf.data.AUTOTUNE)
+
+    steps_per_epoch = len(train_hidden_states) // batch_size
+    validation_steps = len(test_hidden_states) // batch_size
+
+    for epoch in range(epochs):
+        print(f"\nEpoch {epoch + 1}/{epochs}")
+        for step, (x_batch, a_batch, y_batch) in enumerate(train_dataset.take(steps_per_epoch)):
+            loss = model.train_step((x_batch, a_batch, y_batch))
+            if step % 10 == 0:
+                print(f"Step {step}: Loss = {loss['loss']:.4f}")
+
+        # Validation
+        val_losses = []
+        for x_batch, a_batch, y_batch in test_dataset.take(validation_steps):
+            val_loss = model.test_step((x_batch, a_batch, y_batch))
+            val_losses.append(val_loss['loss'])
+        print(f"Validation Loss: {tf.reduce_mean(val_losses):.4f}")
+
+    # Make predictions
+    train_outputs = model.predict([train_hidden_states, train_denoised_matrices])
+    test_outputs = model.predict([test_hidden_states, test_denoised_matrices])
+
+    return model, None, train_outputs, test_outputs

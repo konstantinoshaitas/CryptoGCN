@@ -1,0 +1,2 @@
+Average Spearman's rank correlation: -0.014706316410861864
+Mean Reciprocal Rank: 0.20294770082993227
