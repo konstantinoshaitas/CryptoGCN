@@ -19,14 +19,36 @@ class GraphConvolution(Layer):
         self.bias = self.add_weight(shape=(self.units,),
                                     initializer='zeros',
                                     name='bias')
+        self.time_kernel = self.add_weight(shape=(input_dim, self.units),
+                                           initializer='glorot_uniform',
+                                           name='time_kernel')
         super(GraphConvolution, self).build(input_shape)
 
     def call(self, inputs):
         features, adjacency = inputs
         support = tf.matmul(features, self.kernel)
-        output = tf.matmul(adjacency, support)
+        time_support = tf.matmul(features, self.time_kernel)
+        output = tf.matmul(adjacency, support) + time_support
         output = output + self.bias
         return self.activation(output) if self.activation is not None else output
+
+
+def list_mle_loss(y_true, y_pred):
+    # Ensure y_true and y_pred are float32
+    y_true = tf.cast(y_true, tf.float32)
+    y_pred = tf.cast(y_pred, tf.float32)
+
+    # Sort ground truth and reorder predictions accordingly
+    y_true_sorted, indices = tf.nn.top_k(y_true, k=tf.shape(y_true)[1])
+    y_pred_sorted = tf.gather(y_pred, indices, batch_dims=1)
+
+    # Compute the negative log likelihood
+    pred_largest = tf.expand_dims(y_pred_sorted[:, 0], -1)
+    diff = pred_largest - y_pred_sorted
+    log_sum_exp = tf.reduce_logsumexp(diff, axis=1)
+    loss = tf.reduce_sum(log_sum_exp)
+
+    return loss / tf.cast(tf.shape(y_true)[0], tf.float32)  # Normalize by batch size
 
 
 class CryptoGCN(Model):
@@ -35,8 +57,9 @@ class CryptoGCN(Model):
         self.gcn1 = GraphConvolution(64, activation='relu')
         self.gcn2 = GraphConvolution(32, activation='relu')
         self.flatten = tf.keras.layers.Flatten()
-        self.dense = Dense(num_assets, activation='linear')
-        self.alpha = 0.5  # Hyperparameter to balance pointwise and pairwise loss
+        self.dense1 = Dense(64, activation='relu')
+        self.dense2 = Dense(num_assets, activation='linear')
+        self.alpha = 0.85  # Hyperparameter to balance point-wise and list-wise loss
         self.mse_loss = tf.keras.losses.MeanSquaredError()
 
     def call(self, inputs):
@@ -44,7 +67,8 @@ class CryptoGCN(Model):
         x = self.gcn1([X, A])
         x = self.gcn2([x, A])
         x = self.flatten(x)
-        return self.dense(x)
+        x = self.dense1(x)
+        return self.dense2(x)
 
     def train_step(self, data):
         X, A, y_true = data
@@ -64,11 +88,6 @@ class CryptoGCN(Model):
         loss = self.combined_loss(y_true, y_pred)
         return {"loss": loss}
 
-    def combined_loss(self, y_true, y_pred):
-        pointwise_loss = self.mse_loss(y_true, y_pred)
-        pairwise_loss = self.pairwise_ranking_loss(y_true, y_pred)
-        return pointwise_loss + self.alpha * pairwise_loss
-
     def pairwise_ranking_loss(self, y_true, y_pred):
         # Ensure y_true and y_pred are 2D and float32
         y_true = tf.cast(tf.reshape(y_true, [-1, y_true.shape[-1]]), tf.float32)
@@ -80,6 +99,12 @@ class CryptoGCN(Model):
         loss = tf.maximum(tf.constant(0, dtype=tf.float32),
                           -tf.sign(diff_true) * diff_pred + tf.constant(0.1, dtype=tf.float32))
         return tf.reduce_mean(loss)
+
+    def combined_loss(self, y_true, y_pred):
+        mse_loss = self.mse_loss(y_true, y_pred)
+        # ranking_loss = list_mle_loss(y_true, y_pred)
+        ranking_loss = self.pairwise_ranking_loss(y_true, y_pred)
+        return (1 - self.alpha) * mse_loss + self.alpha * ranking_loss
 
 
 def apply_gcn(train_hidden_states, test_hidden_states, train_denoised_matrices, test_denoised_matrices, train_y,
@@ -94,11 +119,11 @@ def apply_gcn(train_hidden_states, test_hidden_states, train_denoised_matrices, 
     num_time_steps, num_assets, hidden_state_dim = train_hidden_states.shape
 
     model = CryptoGCN(num_assets, hidden_state_dim)
-    model.compile(optimizer=Adam(learning_rate=0.001))
+    model.compile(optimizer=Adam(learning_rate=0.005))
 
     # Custom training loop
     batch_size = 32
-    epochs = 10
+    epochs = 5
     train_dataset = tf.data.Dataset.from_tensor_slices((train_hidden_states, train_denoised_matrices, train_y)) \
         .batch(batch_size).repeat().prefetch(tf.data.AUTOTUNE)
     test_dataset = tf.data.Dataset.from_tensor_slices((test_hidden_states, test_denoised_matrices, test_y)) \

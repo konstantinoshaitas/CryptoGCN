@@ -113,6 +113,26 @@ test_rankings_pred = np.argsort(-test_predictions, axis=1)
 # Generate true rankings from test_y
 test_rankings_true = np.argsort(-test_y, axis=1)
 
+
+def dcg_at_k(r, k):
+    r = np.asfarray(r)[:k]
+    if r.size:
+        return np.sum(np.subtract(np.power(2, r), 1) / np.log2(np.arange(2, r.size + 2)))
+    return 0.
+
+def ndcg_at_k(r, k):
+    dcg_max = dcg_at_k(sorted(r, reverse=True), k)
+    if not dcg_max:
+        return 0.
+    return dcg_at_k(r, k) / dcg_max
+
+def calculate_ndcg(y_true, y_pred, k=10):
+    ndcg_scores = []
+    for true, pred in zip(y_true, y_pred):
+        r = [true[i] for i in np.argsort(pred)[::-1]]
+        ndcg_scores.append(ndcg_at_k(r, k))
+    return np.mean(ndcg_scores)
+
 # Evaluate using Spearman's rank correlation
 spearman_correlations = []
 for pred_rank, true_rank in zip(test_rankings_pred, test_rankings_true):
@@ -122,14 +142,16 @@ for pred_rank, true_rank in zip(test_rankings_pred, test_rankings_true):
 average_correlation = np.mean(spearman_correlations)
 print(f"Average Spearman's rank correlation: {average_correlation}")
 
-
 # Calculate Mean Reciprocal Rank (MRR)
 def mrr_score(y_true, y_pred):
     return np.mean([1. / (np.where(p == t[0])[0][0] + 1) for p, t in zip(y_pred, y_true)])
 
-
 mrr = mrr_score(test_rankings_true[:, :1], test_rankings_pred)
 print(f"Mean Reciprocal Rank: {mrr}")
+
+# Calculate NDCG
+ndcg_10 = calculate_ndcg(test_y, test_predictions, k=10)
+print(f"NDCG@10: {ndcg_10}")
 
 # Visualize rankings
 plt.figure(figsize=(12, 6))
@@ -147,5 +169,6 @@ np.save(os.path.join(results_dir, 'test_rankings_true.npy'), test_rankings_true)
 with open(os.path.join(results_dir, 'evaluation_results.txt'), 'w') as f:
     f.write(f"Average Spearman's rank correlation: {average_correlation}\n")
     f.write(f"Mean Reciprocal Rank: {mrr}\n")
+    f.write(f"NDCG@10: {ndcg_10}\n")
 
 print("Evaluation results have been saved.")
