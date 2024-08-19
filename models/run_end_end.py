@@ -5,14 +5,16 @@ import tensorflow as tf
 from end_end_class import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
 
-# Constants
+# Load Directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, '..', 'data', 'processed_sequential_data')
 AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'correlation_data', 'aggregated_asset_data.csv')
-SEQUENCE_LENGTH = 21
-TRAIN_TEST_SPLIT = 0.75  # Example split ratio
 
-# Load the correlation data
+# Model Parameters
+SEQUENCE_LENGTH = 21
+TRAIN_TEST_SPLIT = 0.75
+
+# Load Denoised Correlation Matrices
 correlation_data = pd.read_csv(AGGREGATED_DATA_PATH, index_col=0)
 correlation_matrix = CorrelationMatrix(correlation_data, window_size=SEQUENCE_LENGTH)
 train_denoised, test_denoised = correlation_matrix.run()
@@ -20,10 +22,8 @@ train_denoised, test_denoised = correlation_matrix.run()
 
 def load_and_process_aggregated_data(file_path):
     df = pd.read_csv(file_path, parse_dates=['time'])
-
-    # Print the column names to check them
+    # Print Columns
     print("Column names in the dataset:", df.columns)
-
     # Ensure data is sorted by UTC time
     df.sort_values(by='time', inplace=True)
 
@@ -109,6 +109,6 @@ def main():
     avg_test_loss = np.mean(test_loss)
     print(f"Average test loss: {avg_test_loss:.4f}")
 
+
 if __name__ == "__main__":
     main()
-
