@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="end to end model created">
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="end to end created">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/end_end_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/end_end_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/pearson_correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/pearson_correlation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/run_end_end.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run_end_end.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +54,7 @@
     "Python.asset_data_csv_creation.executor": "Run",
     "Python.correlation_matrix.executor": "Run",
     "Python.detect_imports.executor": "Run",
-    "Python.end_end_class.executor": "Debug",
+    "Python.end_end_class.executor": "Run",
     "Python.gcn_class.executor": "Run",
     "Python.gcn_visualizer.executor": "Run",
     "Python.lstm_tensorflow.executor": "Run",
@@ -62,7 +62,7 @@
     "Python.pearson_correlation.executor": "Run",
     "Python.pearson_correlation2.executor": "Run",
     "Python.pearson_correlation3.executor": "Run",
-    "Python.run_end_end.executor": "Debug",
+    "Python.run_end_end.executor": "Run",
     "Python.run_tgcn.executor": "Run",
     "Python.run_tgcn_v2.executor": "Run",
     "Python.sequential_data_process.executor": "Run",
@@ -305,7 +305,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724103416592</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="end to end created">
+      <option name="closed" value="true" />
+      <created>1724112029759</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1724112029759</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -335,7 +343,8 @@
     <MESSAGE value="fixed a lot" />
     <MESSAGE value="adjustments" />
     <MESSAGE value="end to end model created" />
-    <option name="LAST_COMMIT_MESSAGE" value="end to end model created" />
+    <MESSAGE value="end to end created" />
+    <option name="LAST_COMMIT_MESSAGE" value="end to end created" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -343,7 +352,7 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/models/run_end_end.py</url>
           <line>163</line>
-          <option name="timeStamp" value="12" />
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

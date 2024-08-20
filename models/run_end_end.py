@@ -107,8 +107,8 @@ def main():
     print(f"y_valid shape: {y_valid.shape}")
 
     # Define the model
-    model = EndToEndCryptoModel(sequence_length=SEQUENCE_LENGTH, num_assets=x_train.shape[2], alpha=0.5)
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.005))
+    model = EndToEndCryptoModel(sequence_length=SEQUENCE_LENGTH, lstm_units=5, num_assets=x_train.shape[2], alpha=0.1)
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001))
 
     # Train and validation data preparation
     train_dataset = tf.data.Dataset.from_tensor_slices((x_train, train_adj_matrices, y_train))
@@ -120,7 +120,7 @@ def main():
     # Calculate steps per epoch based on the available train data
     steps_per_epoch = len(y_train) // batch_size
 
-    epochs = 3
+    epochs = 1
     best_val_loss = float('inf')
 
     for epoch in range(epochs):
