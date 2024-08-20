@@ -4,6 +4,8 @@ import numpy as np
 import tensorflow as tf
 from end_end_class import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Load Directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -41,9 +43,12 @@ def prepare_dataset():
     # Load the aggregated asset data
     df = load_and_process_aggregated_data(AGGREGATED_DATA_PATH)
 
+    # Extract asset names (excluding the time column)
+    asset_names = df.columns[1:]  # Assuming first column is 'time' and the rest are assets
+
     # Split the data into training, validation, and testing sets
     train_index = int(len(df) * 0.7)  # 70% for training
-    valid_index = int(len(df) * 0.85)  # 15% for validation, 15% for testing
+    valid_index = int(len(df) * 0.80)  # 10% for validation, 20% for testing
 
     train_df = df.iloc[:train_index]
     valid_df = df.iloc[train_index:valid_index]
@@ -82,13 +87,13 @@ def prepare_dataset():
     print(f"valid_adj_matrices shape: {valid_adj_matrices.shape}")
     print(f"test_adj_matrices shape: {test_adj_matrices.shape}")
 
-    return x_train, y_train, train_adj_matrices, x_valid, y_valid, valid_adj_matrices, x_test, y_test, test_adj_matrices
+    return x_train, y_train, train_adj_matrices, x_valid, y_valid, valid_adj_matrices, x_test, y_test, test_adj_matrices, asset_names
 
 
 def main():
     # Load and prepare data
     batch_size = 64
-    x_train, y_train, train_adj_matrices, x_valid, y_valid, valid_adj_matrices, x_test, y_test, test_adj_matrices = prepare_dataset()
+    x_train, y_train, train_adj_matrices, x_valid, y_valid, valid_adj_matrices, x_test, y_test, test_adj_matrices, asset_names = prepare_dataset()
 
     # Convert data to float32 and ensure correct shape
     x_train = x_train.astype(np.float32)
@@ -107,7 +112,7 @@ def main():
     print(f"y_valid shape: {y_valid.shape}")
 
     # Define the model
-    model = EndToEndCryptoModel(sequence_length=SEQUENCE_LENGTH, lstm_units=5, num_assets=x_train.shape[2], alpha=0.1)
+    model = EndToEndCryptoModel(sequence_length=SEQUENCE_LENGTH, lstm_units=5, num_assets=x_train.shape[2], alpha=0.4)
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001))
 
     # Train and validation data preparation
@@ -120,7 +125,7 @@ def main():
     # Calculate steps per epoch based on the available train data
     steps_per_epoch = len(y_train) // batch_size
 
-    epochs = 1
+    epochs = 3
     best_val_loss = float('inf')
 
     for epoch in range(epochs):
@@ -154,7 +159,7 @@ def main():
     test_dataset = tf.data.Dataset.from_tensor_slices((x_test, test_adj_matrices, y_test))
     test_dataset = test_dataset.batch(batch_size)
 
-    predictions = []  # TODO: FIX PREDICTIONS COMING OUT ALL =
+    predictions = []
     test_loss = []
     for x_batch, adj_batch, y_batch in test_dataset:
         result = model.test_step((x_batch, adj_batch, y_batch))
@@ -163,6 +168,36 @@ def main():
 
     avg_test_loss = np.mean(test_loss)
     print(f"Average test loss: {avg_test_loss:.4f}")
+
+    # Convert predictions to a numpy array
+    predictions = np.concatenate(predictions, axis=0)
+
+    # Calculate rankings for each time step
+    rankings = np.argsort(-predictions, axis=1)  # Rank in descending order, highest return is rank 0
+
+    plot_values_time(predictions, asset_names=asset_names, title_='Predictions')
+    plot_values_time(y_test, asset_names=asset_names, title_='True Returns')
+
+
+def plot_values_time(return_values, asset_names=None, title_='Predictions'):
+    """
+    Plots the predicted values for each asset over time.
+
+    :param return_values: np.array of shape (number of time steps, number of assets) containing predictions or true vals
+    :param asset_names: Optional list of asset names
+    """
+    num_assets = return_values.shape[1]
+    plt.figure(figsize=(14, 7))
+
+    for i in range(num_assets):
+        plt.plot(return_values[:, i], label=asset_names[i] if asset_names is not None else f'Asset {i + 1}')
+
+    plt.title(f'{title_} for Each Asset Over Time')
+    plt.xlabel('Time Step')
+    plt.ylabel(f'{title_} Value')
+    plt.legend(loc='best')
+    plt.grid(True)
+    plt.show()
 
 
 if __name__ == "__main__":

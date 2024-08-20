@@ -23,7 +23,7 @@ class GraphConvolution(Layer):
     def __init__(self, units, activation=None, **kwargs):
         super(GraphConvolution, self).__init__(**kwargs)
         self.units = units
-        self.activation = tf.keras.layers.LeakyReLU(alpha=0.01)
+        self.activation = tf.keras.layers.LeakyReLU(negative_slope=0.01)
         self.kernel_initializer = tf.keras.initializers.he_normal()
 
     def build(self, input_shape):
@@ -42,11 +42,11 @@ class GraphConvolution(Layer):
 
 # End-to-End Model combining LSTM and GCN
 class EndToEndCryptoModel(Model):
-    def __init__(self, sequence_length, num_assets, lstm_units=40, gcn_units1=16, gcn_units2=8, alpha=0.85):
+    def __init__(self, sequence_length, num_assets, lstm_units=15, gcn_units1=16, gcn_units2=8, alpha=0.5):
         super(EndToEndCryptoModel, self).__init__()
         self.lstm = LSTM(units=lstm_units, return_sequences=True, kernel_regularizer=tf.keras.regularizers.l2(0.008))
         self.batch_norm_lstm = BatchNormalization()
-        self.dropout = Dropout(0.05)
+        self.dropout = Dropout(0.1)
         self.gcn1 = GraphConvolution(gcn_units1, activation='leaky_relu')
         self.gcn2 = GraphConvolution(gcn_units2, activation='leaky_relu')
         self.batch_norm_gcn1 = BatchNormalization()
@@ -122,7 +122,7 @@ class EndToEndCryptoModel(Model):
         gradients = tape.gradient(loss, self.trainable_variables)
         clipped_gradients = [tf.clip_by_value(grad, -1.0, 1.0) for grad in gradients]
 
-        gradients_norm = [tf.norm(g) for g in gradients]
+        # gradients_norm = [tf.norm(g) for g in gradients]
         # tf.print("Gradient norms:", gradients_norm)
         clipped_gradients_norm = [tf.norm(g) for g in clipped_gradients]
         # tf.print("Clipped Gradient norms:", clipped_gradients_norm)
@@ -134,7 +134,7 @@ class EndToEndCryptoModel(Model):
     def test_step(self, data):
         X, A, y_true = data
         y_pred = self([X, A], training=False)
-        # print(y_pred)
+        # print(f'y_pred:\n{y_pred} \n vs \n y_true:\n{y_true}')
         loss = self.combined_loss(y_true, y_pred)
         return {"loss": loss, "y_pred": y_pred}
 

@@ -195,9 +195,9 @@ class CorrelationMatrix:
         self.compute_rolling_correlations()
         self.compute_eigenvalues_eigenvectors()
 
-        # Sequential Split: 70% train, 15% validation, 15% test
+        # Sequential Split: 70% train, 10% validation, 20% test
         train_split_index = int(len(self.original_matrices) * 0.7)
-        valid_split_index = int(len(self.original_matrices) * 0.85)
+        valid_split_index = int(len(self.original_matrices) * 0.80)
 
         self.original_matrices_train = self.original_matrices[:train_split_index]
         self.original_matrices_valid = self.original_matrices[train_split_index:valid_split_index]
