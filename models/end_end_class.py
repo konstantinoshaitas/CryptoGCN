@@ -57,6 +57,10 @@ class EndToEndCryptoModel(Model):
         for i in range(X.shape[2]):  # X.shape[2] is the num_assets
             lstm_input = X[:, :, i]  # Extract the time series for one asset
             lstm_input = tf.expand_dims(lstm_input, -1)  # Add an extra dimension for num_features
+
+            # if i == 0:
+            #     print(f"LSTM Input Sequence for Asset {i}:\n", lstm_input.numpy())
+
             lstm_output = self.lstm(lstm_input)
             lstm_outputs.append(lstm_output)
 
@@ -88,7 +92,7 @@ class EndToEndCryptoModel(Model):
         X, A, y_true = data
         y_pred = self([X, A], training=False)
         loss = self.combined_loss(y_true, y_pred)
-        return {"loss": loss}
+        return {"loss": loss, "y_pred": y_pred}
 
     def pairwise_ranking_loss(self, y_true, y_pred):
         y_true = tf.cast(tf.reshape(y_true, [-1, y_true.shape[-1]]), tf.float32)

@@ -195,30 +195,37 @@ class CorrelationMatrix:
         self.compute_rolling_correlations()
         self.compute_eigenvalues_eigenvectors()
 
-        # Split the data
-        split_index = int(len(self.original_matrices) * 0.75)
+        # Sequential Split: 70% train, 15% validation, 15% test
+        train_split_index = int(len(self.original_matrices) * 0.7)
+        valid_split_index = int(len(self.original_matrices) * 0.85)
 
-        self.original_matrices_train = self.original_matrices[:split_index]
-        self.original_matrices_test = self.original_matrices[split_index:]
+        self.original_matrices_train = self.original_matrices[:train_split_index]
+        self.original_matrices_valid = self.original_matrices[train_split_index:valid_split_index]
+        self.original_matrices_test = self.original_matrices[valid_split_index:]
 
-        # Compute eigenvalues and eigenvectors for train and test separately
-        self.eigenvalues_train = self.eigenvalues[:split_index]
-        self.eigenvalues_test = self.eigenvalues[split_index:]
-        self.eigenvectors_train = self.eigenvectors[:split_index]
-        self.eigenvectors_test = self.eigenvectors[split_index:]
+        # Compute eigenvalues and eigenvectors for train, validation, and test separately
+        self.eigenvalues_train = self.eigenvalues[:train_split_index]
+        self.eigenvalues_valid = self.eigenvalues[train_split_index:valid_split_index]
+        self.eigenvalues_test = self.eigenvalues[valid_split_index:]
 
-        # Denoise train and test matrices separately
+        self.eigenvectors_train = self.eigenvectors[:train_split_index]
+        self.eigenvectors_valid = self.eigenvectors[train_split_index:valid_split_index]
+        self.eigenvectors_test = self.eigenvectors[valid_split_index:]
+
+        # Denoise train, validation, and test matrices separately
         self.eigenvalues = self.eigenvalues_train
         self.eigenvectors = self.eigenvectors_train
         train_denoised = self.denoise_correlation_matrices()
-        self.train_denoised = train_denoised
+
+        self.eigenvalues = self.eigenvalues_valid
+        self.eigenvectors = self.eigenvectors_valid
+        valid_denoised = self.denoise_correlation_matrices()
 
         self.eigenvalues = self.eigenvalues_test
         self.eigenvectors = self.eigenvectors_test
         test_denoised = self.denoise_correlation_matrices()
-        self.test_denoised = test_denoised
 
-        return train_denoised, test_denoised
+        return train_denoised, valid_denoised, test_denoised
 
 
 '''
