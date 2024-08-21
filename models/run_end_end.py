@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from end_end_class import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
+from visualisations import plot_values_time
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -11,10 +12,10 @@ import seaborn as sns
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, '..', 'data', 'processed_sequential_data')
 AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'correlation_data', 'aggregated_asset_data.csv')
+RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results')
 
 # Model Parameters
 SEQUENCE_LENGTH = 21
-TRAIN_TEST_SPLIT = 0.75
 
 # Load Denoised Correlation Matrices
 correlation_data = pd.read_csv(AGGREGATED_DATA_PATH, index_col=0)
@@ -171,33 +172,15 @@ def main():
 
     # Convert predictions to a numpy array
     predictions = np.concatenate(predictions, axis=0)
+    np.save(os.path.join(RESULTS_DIR, "predictions.npy"), predictions)
+    np.save(os.path.join(RESULTS_DIR, "y_test.npy"), y_test)
 
     # Calculate rankings for each time step
     rankings = np.argsort(-predictions, axis=1)  # Rank in descending order, highest return is rank 0
+    np.save(os.path.join(RESULTS_DIR, "rankings.npy"), rankings)
 
     plot_values_time(predictions, asset_names=asset_names, title_='Predictions')
     plot_values_time(y_test, asset_names=asset_names, title_='True Returns')
-
-
-def plot_values_time(return_values, asset_names=None, title_='Predictions'):
-    """
-    Plots the predicted values for each asset over time.
-
-    :param return_values: np.array of shape (number of time steps, number of assets) containing predictions or true vals
-    :param asset_names: Optional list of asset names
-    """
-    num_assets = return_values.shape[1]
-    plt.figure(figsize=(14, 7))
-
-    for i in range(num_assets):
-        plt.plot(return_values[:, i], label=asset_names[i] if asset_names is not None else f'Asset {i + 1}')
-
-    plt.title(f'{title_} for Each Asset Over Time')
-    plt.xlabel('Time Step')
-    plt.ylabel(f'{title_} Value')
-    plt.legend(loc='best')
-    plt.grid(True)
-    plt.show()
 
 
 if __name__ == "__main__":
