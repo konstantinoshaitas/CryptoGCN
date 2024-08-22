@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import empyrical as ep
 
 # Load Directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,8 +20,11 @@ predictions = np.load(os.path.join(RESULTS_DIR, "predictions.npy"))
 rankings = np.load(os.path.join(RESULTS_DIR, "rankings.npy"))
 y_test = np.load(os.path.join(RESULTS_DIR, "y_test.npy"))
 
+print(predictions.shape)
 
-def long_short_portfolio_returns(predictions, y_test, rankings, asset_names, long_n=3, short_n=3, risk_free_rate=0.02):
+
+def long_short_portfolio_returns(predictions, y_test, rankings, asset_names, long_n=3, short_n=3, risk_free_rate=0.02,
+                                 annualisation_factor=1095):
     """
     Evaluate the portfolio performance by going long on the top N assets and short on the bottom M assets.
 
@@ -63,17 +67,15 @@ def long_short_portfolio_returns(predictions, y_test, rankings, asset_names, lon
     cumulative_returns = np.cumprod(1 + portfolio_returns) - 1
 
     # Calculate Sortino ratio (risk-free rate assumed to be 0 for simplicity)
-    downside_risk = np.std(portfolio_returns[portfolio_returns < 0])
-    sortino_ratio = np.mean(portfolio_returns) / downside_risk if downside_risk != 0 else np.inf
+    sortino_ratio = ep.sortino_ratio(portfolio_returns, required_return=0, annualization=annualisation_factor)
 
     # Calculate Sharpe ratio
-    excess_returns = portfolio_returns - (risk_free_rate / 252)  # Assuming daily returns, divide annual rate by 252
-    sharpe_ratio = np.mean(excess_returns) / np.std(portfolio_returns) if np.std(portfolio_returns) != 0 else np.inf
+    sharpe_ratio = ep.sharpe_ratio(portfolio_returns, risk_free=risk_free_rate, annualization=annualisation_factor)
 
     return portfolio_returns, cumulative_returns, sortino_ratio, sharpe_ratio
 
 
-def long_only_benchmark(y_test, risk_free_rate=0.02):
+def long_only_benchmark(y_test, risk_free_rate=0.02, annualisation_factor=1095):
     """
     Evaluate the performance of a long-only portfolio on all assets based on actual returns.
 
@@ -89,24 +91,31 @@ def long_only_benchmark(y_test, risk_free_rate=0.02):
 
     # Calculate Sortino ratio (risk-free rate assumed to be 0 for simplicity)
     downside_risk = np.std(portfolio_returns[portfolio_returns < 0])
-    sortino_ratio = np.mean(portfolio_returns) / downside_risk if downside_risk != 0 else np.inf
+    sortino_ratio = ep.sortino_ratio(portfolio_returns, required_return=0, annualization=1095)
 
-    # Calculate Sharpe ratio
-    excess_returns = portfolio_returns - (risk_free_rate / 252)  # Assuming daily returns, divide annual rate by 252
-    sharpe_ratio = np.mean(excess_returns) / np.std(portfolio_returns) if np.std(portfolio_returns) != 0 else np.inf
+    # Calculate Sharpe Ratio
+    sharpe_ratio = ep.sharpe_ratio(portfolio_returns, risk_free=risk_free_rate, annualization=annualisation_factor)
 
     return portfolio_returns, cumulative_returns, sortino_ratio, sharpe_ratio
 
 
-def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, short_n=3, risk_free_rate=0.02):
+def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, short_n=3, risk_free_rate=0.0):
     """Main function to evaluate performance."""
     # Evaluate long-short strategy
     portfolio_returns, cumulative_returns, sortino_ratio, sharpe_ratio = long_short_portfolio_returns(
-        predictions, y_test, rankings, asset_names, long_n=long_n, short_n=short_n, risk_free_rate=risk_free_rate)
+        predictions, y_test, rankings, asset_names, long_n=long_n, short_n=short_n, risk_free_rate=risk_free_rate,
+        annualisation_factor=1095)
 
-    print(f"Long-Short Strategy Sortino Ratio: {sortino_ratio:.4f}")
-    print(f"Long-Short Strategy Sharpe Ratio: {sharpe_ratio:.4f}")
-    print(f"Long-Short Strategy Final Cumulative Return: {cumulative_returns[-1]:.4f}")
+    if long_n == 0:
+        portfolio_type = f'Short-Only. Worst {short_n} Assets Portfolio'
+    elif short_n == 0:
+        portfolio_type = f'Long-Only. Best {long_n} Assets Portfolio'
+    else:
+        portfolio_type = 'Long-Short Portfolio'
+
+    print(f"{portfolio_type} Strategy Sortino Ratio: {sortino_ratio:.4f}")
+    print(f"{portfolio_type} Strategy Sharpe Ratio: {sharpe_ratio:.4f}")
+    print(f"{portfolio_type} Strategy Final Cumulative Return: {cumulative_returns[-1]:.4f}")
 
     # Evaluate long-only benchmark
     benchmark_returns, benchmark_cumulative, benchmark_sortino, benchmark_sharpe = long_only_benchmark(
@@ -127,4 +136,4 @@ def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, s
 
 
 # Run evaluation with specified long and short asset counts
-evaluate_performance(predictions, y_test, rankings, asset_names, long_n=4, short_n=0)
+evaluate_performance(predictions, y_test, rankings, asset_names, long_n=5, short_n=0, risk_free_rate=0.0)

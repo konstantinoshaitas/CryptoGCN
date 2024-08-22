@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import tensorflow as tf
-from end_end_class import EndToEndCryptoModel
+from Crypto_LSTM_GCN import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
 from visualisations import plot_values_time
 

@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="evaluation file added" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="adjusted">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/end_end_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/Crypto_LSTM_GCN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/run_end_end.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/cumulative_returns.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/cumulative_returns.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/results/evaluation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/portfolio_returns.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/portfolio_returns.npy" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -341,7 +348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724350612837</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="adjusted">
+      <option name="closed" value="true" />
+      <created>1724359272414</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1724359272414</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -374,7 +389,8 @@
     <MESSAGE value="end to end created" />
     <MESSAGE value="end model adjust" />
     <MESSAGE value="evaluation file added" />
-    <option name="LAST_COMMIT_MESSAGE" value="evaluation file added" />
+    <MESSAGE value="adjusted" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjusted" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
