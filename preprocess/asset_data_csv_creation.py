@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from pathlib import Path
 
+
 def aggregate_asset_data(csv_files, output_file):
     """
     Aggregates closing prices from multiple asset CSV files into a single CSV file,
@@ -46,6 +47,7 @@ def aggregate_asset_data(csv_files, output_file):
 
     # Save the aggregated data to the output file
     aggregated_data.to_csv(output_file, index=False)
+
 
 # Example usage
 # Get the directory of the current script

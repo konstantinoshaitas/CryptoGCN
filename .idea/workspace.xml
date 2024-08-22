@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="end model adjust">
-      <change afterPath="$PROJECT_DIR$/results/evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/best_model.weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/models/best_model.weights.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/end_end_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/end_end_class.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/run_end_end.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run_end_end.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/predictions.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/predictions.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/rankings.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/rankings.npy" afterDir="false" />
-    </list>
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="evaluation file added" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -341,7 +333,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724277630083</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="evaluation file added">
+      <option name="closed" value="true" />
+      <created>1724350612837</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1724350612837</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -373,7 +373,8 @@
     <MESSAGE value="end to end model created" />
     <MESSAGE value="end to end created" />
     <MESSAGE value="end model adjust" />
-    <option name="LAST_COMMIT_MESSAGE" value="end model adjust" />
+    <MESSAGE value="evaluation file added" />
+    <option name="LAST_COMMIT_MESSAGE" value="evaluation file added" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
