@@ -118,7 +118,7 @@ class EndToEndCryptoModel(Model):
 
         # gradients_norm = [tf.norm(g) for g in gradients]
         # tf.print("Gradient norms:", gradients_norm)
-        clipped_gradients_norm = [tf.norm(g) for g in clipped_gradients]
+        # clipped_gradients_norm = [tf.norm(g) for g in clipped_gradients]
         # tf.print("Clipped Gradient norms:", clipped_gradients_norm)
 
         self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
