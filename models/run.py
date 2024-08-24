@@ -5,7 +5,12 @@ import tensorflow as tf
 from Crypto_LSTM_GCN import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
 from visualisations import plot_values_time
+import random
 
+SEED = 42
+tf.random.set_seed(SEED)
+np.random.seed(SEED)
+random.seed(SEED)
 
 # Load Directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

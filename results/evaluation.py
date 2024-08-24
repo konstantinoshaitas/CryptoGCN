@@ -111,7 +111,7 @@ def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, s
     elif short_n == 0:
         portfolio_type = f'Long-Only. Best {long_n} Assets Portfolio'
     else:
-        portfolio_type = 'Long-Short Portfolio'
+        portfolio_type = f'Long-Short Portfolio {long_n} asset(s) long {short_n} asset(s) short'
 
     print(f"{portfolio_type} Strategy Sortino Ratio: {sortino_ratio:.4f}")
     print(f"{portfolio_type} Strategy Sharpe Ratio: {sharpe_ratio:.4f}")
@@ -136,4 +136,4 @@ def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, s
 
 
 # Run evaluation with specified long and short asset counts
-evaluate_performance(predictions, y_test, rankings, asset_names, long_n=5, short_n=0, risk_free_rate=0.0)
+evaluate_performance(predictions, y_test, rankings, asset_names, long_n=2, short_n=0, risk_free_rate=0.0)
