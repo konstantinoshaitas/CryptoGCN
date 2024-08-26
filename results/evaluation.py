@@ -126,14 +126,14 @@ def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, s
     print(f"Long-Only Benchmark Final Cumulative Return: {benchmark_cumulative[-1]:.4f}")
 
     # Optional: Save the evaluation results
-    np.save(os.path.join(RESULTS_DIR, "portfolio_returns.npy"), portfolio_returns)
-    np.save(os.path.join(RESULTS_DIR, "cumulative_returns.npy"), cumulative_returns)
-    np.save(os.path.join(RESULTS_DIR, "benchmark_returns.npy"), benchmark_returns)
-    np.save(os.path.join(RESULTS_DIR, "benchmark_cumulative.npy"), benchmark_cumulative)
+    # np.save(os.path.join(RESULTS_DIR, "portfolio_returns.npy"), portfolio_returns)
+    # np.save(os.path.join(RESULTS_DIR, "cumulative_returns.npy"), cumulative_returns)
+    # np.save(os.path.join(RESULTS_DIR, "benchmark_returns.npy"), benchmark_returns)
+    # np.save(os.path.join(RESULTS_DIR, "benchmark_cumulative.npy"), benchmark_cumulative)
 
     return (portfolio_returns, cumulative_returns, sortino_ratio, sharpe_ratio, benchmark_returns, benchmark_cumulative,
             benchmark_sortino, benchmark_sharpe)
 
 
 # Run evaluation with specified long and short asset counts
-evaluate_performance(predictions, y_test, rankings, asset_names, long_n=2, short_n=0, risk_free_rate=0.0)
+evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, short_n=0, risk_free_rate=0.00004455822024)

@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="financial metrics">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="run">
+      <change afterPath="$PROJECT_DIR$/models/run_rolling_window.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/best_model.weights.h5" beforeDir="false" afterPath="$PROJECT_DIR$/models/best_model.weights.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/Crypto_LSTM_GCN.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/Crypto_LSTM_GCN.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/cumulative_returns.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/cumulative_returns.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/results/evaluation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/portfolio_returns.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/portfolio_returns.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/predictions.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/predictions.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/rankings.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/rankings.npy" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +67,7 @@
     "Python.pearson_correlation3.executor": "Run",
     "Python.run.executor": "Run",
     "Python.run_end_end.executor": "Run",
+    "Python.run_rolling_window.executor": "Run",
     "Python.run_tgcn.executor": "Run",
     "Python.run_tgcn_v2.executor": "Run",
     "Python.sequential_data_process.executor": "Run",
@@ -368,7 +366,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724363089002</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="run">
+      <option name="closed" value="true" />
+      <created>1724540111865</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1724540111865</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -403,7 +409,8 @@
     <MESSAGE value="evaluation file added" />
     <MESSAGE value="adjusted" />
     <MESSAGE value="financial metrics" />
-    <option name="LAST_COMMIT_MESSAGE" value="financial metrics" />
+    <MESSAGE value="run" />
+    <option name="LAST_COMMIT_MESSAGE" value="run" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

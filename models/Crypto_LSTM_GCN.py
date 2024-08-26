@@ -49,7 +49,6 @@ class EndToEndCryptoModel(Model):
         self.dense2 = Dense(num_assets, activation='linear')
         self.alpha = alpha
         self.mse_loss = tf.keras.losses.MeanSquaredError()
-
         self.sequence_length = sequence_length
 
     def call(self, inputs):
