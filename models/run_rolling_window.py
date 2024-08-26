@@ -21,10 +21,10 @@ RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results')
 # Model Parameters
 SEQUENCE_LENGTH = 21
 DATA_POINTS_PER_DAY = 3  # 8-hourly data
-TRAIN_DAYS = 300  # Approximately 6 months
-VALIDATION_DAYS = 30  # 2 weeks
-TEST_DAYS = 30  # 2 weeks
-STEP_DAYS = 60  # Move window by 2 weeks each time
+TRAIN_DAYS = 600  # Approximately 2 Y
+VALIDATION_DAYS = 60  # 2 Months
+TEST_DAYS = 60  # 2 Month
+STEP_DAYS = 120  # Move window by 4M each time
 
 # Convert days to data points
 TRAIN_SIZE = TRAIN_DAYS * DATA_POINTS_PER_DAY
@@ -107,10 +107,10 @@ def main():
 
         # Define and compile the model
         model = EndToEndCryptoModel(sequence_length=SEQUENCE_LENGTH, lstm_units=5, num_assets=x_train.shape[2], alpha=1)
-        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.000005))
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.000003))
 
         # Train the model
-        batch_size = 16
+        batch_size = 64
         train_dataset = tf.data.Dataset.from_tensor_slices((x_train, train_adj_matrices, y_train))
         train_dataset = train_dataset.batch(batch_size).repeat().prefetch(tf.data.AUTOTUNE)
 

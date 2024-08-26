@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="run">
-      <change afterPath="$PROJECT_DIR$/models/run_rolling_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/Crypto_LSTM_GCN.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/Crypto_LSTM_GCN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/cumulative_returns.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/cumulative_returns.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/results/evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/portfolio_returns.npy" beforeDir="false" afterPath="$PROJECT_DIR$/results/portfolio_returns.npy" afterDir="false" />
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="started working on rolling window">
+      <change beforePath="$PROJECT_DIR$/models/run_rolling_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/run_rolling_window.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,42 +43,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.Doctests in tensor_shape.executor": "Run",
-    "Python.LSTM_Model.executor": "Run",
-    "Python.asset_data_concat_csv.executor": "Run",
-    "Python.asset_data_csv_creation.executor": "Run",
-    "Python.correlation_matrix.executor": "Run",
-    "Python.detect_imports.executor": "Run",
-    "Python.end_end_class.executor": "Run",
-    "Python.evaluation.executor": "Run",
-    "Python.gcn_class.executor": "Run",
-    "Python.gcn_visualizer.executor": "Run",
-    "Python.lstm_tensorflow.executor": "Run",
-    "Python.lstm_tf_class.executor": "Run",
-    "Python.pearson_correlation.executor": "Run",
-    "Python.pearson_correlation2.executor": "Run",
-    "Python.pearson_correlation3.executor": "Run",
-    "Python.run.executor": "Run",
-    "Python.run_end_end.executor": "Run",
-    "Python.run_rolling_window.executor": "Run",
-    "Python.run_tgcn.executor": "Run",
-    "Python.run_tgcn_v2.executor": "Run",
-    "Python.sequential_data_process.executor": "Run",
-    "Python.temporal_gcn.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.testing_area.executor": "Run",
-    "Python.tgcn_results.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/koko/Desktop/THESIS/CryptoGCN",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.Doctests in tensor_shape.executor&quot;: &quot;Run&quot;,
+    &quot;Python.LSTM_Model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.asset_data_concat_csv.executor&quot;: &quot;Run&quot;,
+    &quot;Python.asset_data_csv_creation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.correlation_matrix.executor&quot;: &quot;Run&quot;,
+    &quot;Python.detect_imports.executor&quot;: &quot;Run&quot;,
+    &quot;Python.end_end_class.executor&quot;: &quot;Run&quot;,
+    &quot;Python.evaluation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gcn_class.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gcn_visualizer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lstm_tensorflow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lstm_tf_class.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pearson_correlation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pearson_correlation2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pearson_correlation3.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_end_end.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_rolling_window.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_tgcn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run_tgcn_v2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sequential_data_process.executor&quot;: &quot;Run&quot;,
+    &quot;Python.temporal_gcn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.testing_area.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tgcn_results.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/koko/Desktop/THESIS/CryptoGCN&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="CryptoGCN" is-module-sdk="true">
@@ -374,7 +369,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724540111865</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="started working on rolling window">
+      <option name="closed" value="true" />
+      <created>1724714701233</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1724714701233</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -410,7 +413,8 @@
     <MESSAGE value="adjusted" />
     <MESSAGE value="financial metrics" />
     <MESSAGE value="run" />
-    <option name="LAST_COMMIT_MESSAGE" value="run" />
+    <MESSAGE value="started working on rolling window" />
+    <option name="LAST_COMMIT_MESSAGE" value="started working on rolling window" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

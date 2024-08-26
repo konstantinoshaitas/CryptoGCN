@@ -19,6 +19,21 @@ print("First Asset Name:", asset_names[0])
 predictions = np.load(os.path.join(RESULTS_DIR, "predictions.npy"))
 rankings = np.load(os.path.join(RESULTS_DIR, "rankings.npy"))
 y_test = np.load(os.path.join(RESULTS_DIR, "y_test.npy"))
+predictions_window_0 = np.load(os.path.join(RESULTS_DIR, "predictions_window_0.npy"))
+predictions_window_1 = np.load(os.path.join(RESULTS_DIR, "predictions_window_1.npy"))
+predictions_window_2 = np.load(os.path.join(RESULTS_DIR, "predictions_window_2.npy"))
+predictions_window_3 = np.load(os.path.join(RESULTS_DIR, "predictions_window_3.npy"))
+
+rankings_window_0 = np.load(os.path.join(RESULTS_DIR, "rankings_window_0.npy"))
+rankings_window_1 = np.load(os.path.join(RESULTS_DIR, "rankings_window_1.npy"))
+rankings_window_2 = np.load(os.path.join(RESULTS_DIR, "rankings_window_2.npy"))
+rankings_window_3 = np.load(os.path.join(RESULTS_DIR, "rankings_window_3.npy"))
+
+y_test_window_0 = np.load(os.path.join(RESULTS_DIR, "y_test_window_0.npy"))
+y_test_window_1 = np.load(os.path.join(RESULTS_DIR, "y_test_window_1.npy"))
+y_test_window_2 = np.load(os.path.join(RESULTS_DIR, "y_test_window_2.npy"))
+y_test_window_3 = np.load(os.path.join(RESULTS_DIR, "y_test_window_3.npy"))
+
 
 print(predictions.shape)
 
@@ -137,3 +152,5 @@ def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, s
 
 # Run evaluation with specified long and short asset counts
 evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, short_n=0, risk_free_rate=0.00004455822024)
+
+
