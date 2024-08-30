@@ -7,6 +7,7 @@ from pearson_correlation import CorrelationMatrix
 from visualisations import plot_values_time
 import random
 
+
 SEED = 42
 tf.random.set_seed(SEED)
 np.random.seed(SEED)
@@ -185,6 +186,9 @@ def main():
 
     plot_values_time(predictions, asset_names=asset_names, title_='Predictions')
     plot_values_time(y_test, asset_names=asset_names, title_='True Returns')
+
+    # Save model
+    model.save("crypto_lstm_gcn_model.keras")
 
 
 if __name__ == "__main__":

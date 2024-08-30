@@ -35,8 +35,16 @@ End-to-End Model combining LSTM and GCN
 
 
 class EndToEndCryptoModel(Model):
-    def __init__(self, sequence_length, num_assets, lstm_units=15, gcn_units1=16, gcn_units2=8, alpha=0.5):
-        super(EndToEndCryptoModel, self).__init__()
+    def __init__(self, sequence_length, num_assets, lstm_units=15, gcn_units1=16, gcn_units2=8, alpha=0.5, **kwargs):
+        super(EndToEndCryptoModel, self).__init__(**kwargs)
+        self.sequence_length = sequence_length
+        self.num_assets = num_assets
+        self.lstm_units = lstm_units
+        self.gcn_units1 = gcn_units1
+        self.gcn_units2 = gcn_units2
+        self.alpha = alpha
+
+        # Define model layers
         self.lstm = LSTM(units=lstm_units, return_sequences=True, kernel_regularizer=tf.keras.regularizers.l2(0.008))
         self.batch_norm_lstm = BatchNormalization()
         self.dropout = Dropout(0.1)
@@ -47,9 +55,22 @@ class EndToEndCryptoModel(Model):
         self.flatten = Flatten()
         self.dense1 = Dense(3, activation='relu')
         self.dense2 = Dense(num_assets, activation='linear')
-        self.alpha = alpha
         self.mse_loss = tf.keras.losses.MeanSquaredError()
-        self.sequence_length = sequence_length
+
+    def get_config(self):
+        return {
+            'sequence_length': self.sequence_length,
+            'num_assets': self.num_assets,
+            'lstm_units': self.lstm_units,
+            'gcn_units1': self.gcn_units1,
+            'gcn_units2': self.gcn_units2,
+            'alpha': self.alpha,
+            'trainable': self.trainable
+        }
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
     def call(self, inputs):
         x, a = inputs  # X: shape (batch_size, sequence_length=21, num_assets=15), A: adjacency matrix
