@@ -6,7 +6,7 @@ from Crypto_LSTM_GCN import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
 from visualisations import plot_values_time
 import random
-
+import visualkeras
 
 SEED = 42
 tf.random.set_seed(SEED)
@@ -15,9 +15,8 @@ random.seed(SEED)
 
 # Load Directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, '..', 'data', 'processed_sequential_data')
 AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'correlation_data', 'aggregated_asset_data.csv')
-RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results')
+RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results', 'lstm_gcn_results')
 
 # Model Parameters
 SEQUENCE_LENGTH = 21
@@ -64,42 +63,35 @@ def prepare_dataset():
     def create_sequences_and_targets(data):
         sequences = []
         targets = []
+        times = []
         for i in range(len(data) - SEQUENCE_LENGTH):
             seq = data.iloc[i:i + SEQUENCE_LENGTH, 1:].values  # Exclude the time column
             target = data.iloc[i + SEQUENCE_LENGTH, 1:].values  # Target is the t+1 return
             sequences.append(seq)
             targets.append(target)
-        return np.array(sequences), np.array(targets)
+            times.append(data.iloc[i + SEQUENCE_LENGTH]['time'])
+        return np.array(sequences), np.array(targets), np.array(times)
 
-    x_train, y_train = create_sequences_and_targets(train_df)
-    x_valid, y_valid = create_sequences_and_targets(valid_df)
-    x_test, y_test = create_sequences_and_targets(test_df)
+    x_train, y_train, train_times = create_sequences_and_targets(train_df)
+    x_valid, y_valid, validation_times = create_sequences_and_targets(valid_df)
+    x_test, y_test, test_times = create_sequences_and_targets(test_df)
 
     # Correct the slicing of adjacency matrices
     train_adj_matrices = np.array(train_denoised[:len(x_train)])  # Matches x_train
     valid_adj_matrices = np.array(valid_denoised[:len(x_valid)])  # Matches x_valid
     test_adj_matrices = np.array(test_denoised[:len(x_test)])  # Matches x_test
 
-    # Check shapes
-    print(f"x_train shape: {x_train.shape}")
-    print(f"x_valid shape: {x_valid.shape}")
-    print(f"x_test shape: {x_test.shape}")
-
-    print(f"y_train shape: {y_train.shape}")
-    print(f"y_valid shape: {y_valid.shape}")
-    print(f"y_test shape: {y_test.shape}")
-
-    print(f"train_adj_matrices shape: {train_adj_matrices.shape}")
-    print(f"valid_adj_matrices shape: {valid_adj_matrices.shape}")
-    print(f"test_adj_matrices shape: {test_adj_matrices.shape}")
-
-    return x_train, y_train, train_adj_matrices, x_valid, y_valid, valid_adj_matrices, x_test, y_test, test_adj_matrices, asset_names
+    return (x_train, y_train, train_adj_matrices, train_times, x_valid, y_valid,
+            valid_adj_matrices, validation_times, x_test, y_test, test_adj_matrices,
+            test_times, asset_names)
 
 
 def main():
     # Load and prepare data
     batch_size = 64
-    x_train, y_train, train_adj_matrices, x_valid, y_valid, valid_adj_matrices, x_test, y_test, test_adj_matrices, asset_names = prepare_dataset()
+    (x_train, y_train, train_adj_matrices, train_times, x_valid, y_valid,
+     valid_adj_matrices, validation_times, x_test, y_test, test_adj_matrices,
+     test_times, asset_names) = prepare_dataset()
 
     # Convert data to float32 and ensure correct shape
     x_train = x_train.astype(np.float32)
@@ -112,10 +104,7 @@ def main():
     x_test = x_test[:-1]
     y_test = y_test[:-1]
     test_adj_matrices = test_adj_matrices[:-1]
-
-    print(f"x_valid shape: {x_valid.shape}")
-    print(f"valid_adj_matrices shape: {valid_adj_matrices.shape}")
-    print(f"y_valid shape: {y_valid.shape}")
+    test_times = test_times[:-1]
 
     # Define the model
     model = EndToEndCryptoModel(sequence_length=SEQUENCE_LENGTH, lstm_units=5, num_assets=x_train.shape[2], alpha=1)
@@ -183,9 +172,10 @@ def main():
     # Calculate rankings for each time step
     rankings = np.argsort(-predictions, axis=1)  # Rank in descending order, highest return is rank 0
     np.save(os.path.join(RESULTS_DIR, "rankings.npy"), rankings)
+    np.save(os.path.join(RESULTS_DIR, "test_times.npy"), test_times)
 
-    plot_values_time(predictions, asset_names=asset_names, title_='Predictions')
-    plot_values_time(y_test, asset_names=asset_names, title_='True Returns')
+    plot_values_time(predictions, asset_names=asset_names, title_='Predictions', time_values=test_times)
+    plot_values_time(y_test, asset_names=asset_names, title_='True Returns', time_values=test_times)
 
     # Save model
     model.save("crypto_lstm_gcn_model.keras")

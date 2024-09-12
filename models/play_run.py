@@ -2,10 +2,12 @@ import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import plot_model
 from pearson_correlation import CorrelationMatrix
 import pandas as pd
 import random
 from Crypto_LSTM_GCN import EndToEndCryptoModel
+import visualkeras
 
 SEED = 42
 tf.random.set_seed(SEED)
@@ -16,6 +18,8 @@ random.seed(SEED)
 with tf.keras.utils.custom_object_scope({'EndToEndCryptoModel': EndToEndCryptoModel}):
     model = load_model("crypto_lstm_gcn_model.keras")
 print('LSTM-GCN Model Loaded...')
+
+model.summary()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'play_data', 'aggregated_asset_data.csv')
@@ -29,6 +33,7 @@ correlation_data = pd.read_csv(AGGREGATED_DATA_PATH, index_col=0)
 correlation_matrix = CorrelationMatrix(correlation_data, window_size=SEQUENCE_LENGTH)
 train_denoised, valid_denoised, test_denoised = correlation_matrix.run()
 denoised_matrices = np.concatenate((train_denoised, valid_denoised, test_denoised), axis=0)
+
 
 # Load and preprocess the new data
 def load_and_process_new_data(file_path, sequence_length=21):
@@ -51,6 +56,7 @@ def load_and_process_new_data(file_path, sequence_length=21):
     sequences = np.array(sequences)
     y_test = np.array(y_test)
     return sequences, y_test
+
 
 # Prepare the data (this should match the data preprocessing during training)
 new_sequences, y_test = load_and_process_new_data(AGGREGATED_DATA_PATH)
@@ -75,3 +81,7 @@ print("Predictions:", predictions.shape)
 print("y_test:", y_test.shape)
 
 print(y_test)
+
+# plot_model(model, to_file='model_architecture.png', show_shapes=True, show_layer_names=True)
+# model.summary()
+# visualkeras.layered_view(model, to_file='model_architecture_visualkeras.png').show()

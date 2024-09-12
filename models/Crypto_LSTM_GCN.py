@@ -28,6 +28,9 @@ class GraphConvolution(Layer):
         output = output + self.bias
         return self.activation(output) if self.activation is not None else output
 
+    def compute_output_shape(self, input_shape):
+        return input_shape[0][0], input_shape[0][1], self.units
+
 
 '''
 End-to-End Model combining LSTM and GCN
