@@ -5,6 +5,7 @@ import empyrical as ep
 from scipy.stats import spearmanr, kendalltau
 import matplotlib.pyplot as plt
 import empyrical as ep
+from sklearn.metrics import ndcg_score
 
 
 def long_short_portfolio_returns(predictions, y_test, rankings, asset_names, long_n=3, short_n=3, risk_free_rate=0.02,
@@ -102,7 +103,7 @@ def evaluate_performance(predictions, y_test, rankings, asset_names, long_n=3, s
             benchmark_returns, benchmark_cumulative, benchmark_sortino, benchmark_sharpe, benchmark_max_drawdown)
 
 
-def calculate_pearson_rho(predicted_rankings, true_rankings):
+def calculate_spearman_rho(predicted_rankings, true_rankings):
     """
     Calculate the Spearman's Rho (rank correlation) for each time step using precomputed rankings.
 
@@ -173,9 +174,41 @@ def top_k_metrics(predicted_rankings, true_rankings, k=3, top_a=7):
     return avg_top_k_accuracy, avg_precision, k
 
 
-def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabel="Values", x_values=None):
+def calculate_ndcg(predicted_rankings, true_rankings, k):
     """
-    Plot one or more lists or numpy arrays as lines on the same plot.
+    Calculate NDCG@k across all time steps using rankings.
+
+    :param predicted_rankings: Predicted rankings (2D array: time_steps, assets).
+    :param true_rankings: True rankings (2D array: time_steps, assets).
+    :param k: Rank cutoff.
+    :return: List of NDCG@k for each time step, and the average NDCG@k across all time steps.
+    """
+    ndcg_values = []
+
+    # Loop over time steps (i.e., 757 iterations)
+    for i in range(predicted_rankings.shape[0]):
+        # Extract rankings for this time step (15 assets)
+        pred_ranks = predicted_rankings[i]
+        true_ranks = true_rankings[i]
+
+        # Calculate NDCG for this time step
+        ndcg_value = ndcg_score([true_ranks], [pred_ranks], k=k)
+        ndcg_values.append(ndcg_value)
+
+    # Return the list of NDCG values for each time step and the average NDCG across all time steps
+    return ndcg_values, np.mean(ndcg_values)
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+
+def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabel="Values", x_values=None,
+               figsize=(12, 6), style="dark", custom_palette=None, palette="twilight", linewidth=2, alpha=1,
+               marker=None, markersize=6, legend_loc='best', save_path=None):
+    """
+    Plot one or more lists or numpy arrays as lines on the same plot with enhanced aesthetics using Seaborn.
 
     :param lists: One or more lists or numpy arrays to plot.
     :param labels: Labels for each list, passed as a list of strings. Must match the number of lists provided.
@@ -183,19 +216,56 @@ def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabe
     :param xlabel: Label for the x-axis.
     :param ylabel: Label for the y-axis.
     :param x_values: Values for the X axis. If None, defaults to the index of the data.
+    :param figsize: Size of the figure as a tuple (width, height).
+    :param style: Seaborn style (e.g., 'darkgrid', 'whitegrid', 'dark', 'white', 'ticks').
+    :param custom_palette: Used if you want to define multiple palettes, i.e. custom.
+    :param palette: Color palette to use (e.g., 'deep', 'muted', 'pastel', 'bright', 'dark', 'colorblind').
+    :param linewidth: Width of the plotted lines.
+    :param alpha: Transparency of the lines (0 to 1).
+    :param marker: Marker style for data points.
+    :param markersize: Size of markers.
+    :param legend_loc: Location of the legend (e.g., 'best', 'upper left', 'lower right').
+    :param save_path: Path to save the figure. If None, the plot is displayed but not saved.
     """
+    # Set the Seaborn style
+    sns.set_style(style)
+
+    # Create a new figure
+    plt.figure(figsize=figsize)
+
+    # Get color palette
+    if custom_palette:
+        colors = custom_palette
+    else:
+        colors = sns.color_palette(palette, n_colors=len(lists))
+
     for i, data in enumerate(lists):
         if x_values is not None:
-            plt.plot(x_values, data, label=labels[i] if labels else None)
+            sns.lineplot(x=x_values, y=data, label=labels[i] if labels else None,
+                         color=colors[i], linewidth=linewidth, alpha=alpha, marker=marker, markersize=markersize)
         else:
-            plt.plot(data, label=labels[i] if labels else None)
+            sns.lineplot(x=range(len(data)), y=data, label=labels[i] if labels else None,
+                         color=colors[i], linewidth=linewidth, alpha=alpha, marker=marker, markersize=markersize)
+
+    # Customize the plot
+    plt.title(title, fontsize=16, fontweight='bold')
+    plt.xlabel(xlabel, fontsize=12)
+    plt.ylabel(ylabel, fontsize=12)
+    plt.grid(True, linestyle='-', alpha=0.5)
+
+    # Customize tick labels
+    plt.tick_params(axis='both', which='major', labelsize=10)
 
     # If labels are provided, show the legend
     if labels is not None:
-        plt.legend()
+        plt.legend(loc=legend_loc, fontsize=10, frameon=True, framealpha=0.8)
 
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.grid(True)
+    # Adjust layout to prevent clipping of labels
+    plt.tight_layout()
+
+    # Save the figure if a save path is provided
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+
+    # Show the plot
     plt.show()
