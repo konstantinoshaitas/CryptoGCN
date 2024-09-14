@@ -6,6 +6,7 @@ from scipy.stats import spearmanr, kendalltau
 import matplotlib.pyplot as plt
 import empyrical as ep
 from sklearn.metrics import ndcg_score
+import matplotlib.dates as mdates
 
 
 def long_short_portfolio_returns(predictions, y_test, rankings, asset_names, long_n=3, short_n=3, risk_free_rate=0.02,
@@ -205,8 +206,8 @@ import numpy as np
 
 
 def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabel="Values", x_values=None,
-               figsize=(12, 6), style="dark", custom_palette=None, palette="twilight", linewidth=2, alpha=1,
-               marker=None, markersize=6, legend_loc='best', save_path=None):
+               figsize=(10, 6), style="white", custom_palette=None, palette="twilight", linewidth=1.8, alpha=1,
+               marker=None, markersize=3, legend_loc='best', save_path=None):
     """
     Plot one or more lists or numpy arrays as lines on the same plot with enhanced aesthetics using Seaborn.
 
@@ -251,7 +252,12 @@ def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabe
     plt.title(title, fontsize=16, fontweight='bold')
     plt.xlabel(xlabel, fontsize=12)
     plt.ylabel(ylabel, fontsize=12)
-    plt.grid(True, linestyle='-', alpha=0.5)
+    plt.grid(True, linestyle='-.', alpha=0.85)
+
+    if x_values is not None and isinstance(x_values[0], (np.datetime64, pd.Timestamp)):
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
+        plt.gcf().autofmt_xdate()
 
     # Customize tick labels
     plt.tick_params(axis='both', which='major', labelsize=10)
@@ -265,7 +271,8 @@ def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabe
 
     # Save the figure if a save path is provided
     if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        pdf_save_path = os.path.join(save_path, f"{save_path}.pdf")
+        plt.savefig(pdf_save_path, dpi=600, bbox_inches='tight', format='pdf')
 
     # Show the plot
     plt.show()

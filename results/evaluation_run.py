@@ -69,9 +69,11 @@ for long in long_values:
 
     plot_lists(hybrid_cumulative_returns * 100, l_cum_ret_iter * 100, hybrid_benchmark_cumulative * 100,
                labels=[f"Hybrid Model: Long {long} Assets", f"LSTM Baseline: Long {long} Assets", 'All Assets Benchmark'],
-               title="Cumulative Returns Over Time",
+               title="",
                ylabel='% Cumulative Return',
                x_values=test_times,
+               linewidth=1.1,
+               figsize=(6, 4),
                save_path=os.path.join(PLOT_RESULTS, f'cum_return_long_{long}_assets'))
 
 HYBRID_LIST = []
