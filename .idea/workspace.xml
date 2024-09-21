@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="MORE EVAL">
+    <list default="true" id="f4c11190-dba0-462b-963b-c659dd3314c9" name="Changes" comment="started rolling window">
+      <change beforePath="$PROJECT_DIR$/.idea/CryptoGCN.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CryptoGCN.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/crypto_lstm_gcn_model.keras" beforeDir="false" afterPath="$PROJECT_DIR$/models/crypto_lstm_gcn_model.keras" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/evaluation_methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/results/evaluation_methods.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/evaluation_run.py" beforeDir="false" afterPath="$PROJECT_DIR$/results/evaluation_run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_all_long_assets.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_1_assets.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_2_assets.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_3_assets.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_5_assets.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_all_long_assets.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/results/plot_results/cum_return_all_long_assets.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_1_assets.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/results/plot_results/cum_return_long_1_assets.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_2_assets.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/results/plot_results/cum_return_long_2_assets.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_3_assets.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/results/plot_results/cum_return_long_3_assets.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/plot_results/cum_return_long_5_assets.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/results/plot_results/cum_return_long_5_assets.pdf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +112,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-0509580d9d50-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.14494.241" />
+        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
       </set>
     </attachedChunks>
   </component>

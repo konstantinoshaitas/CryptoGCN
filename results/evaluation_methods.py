@@ -206,7 +206,7 @@ import numpy as np
 
 
 def plot_lists(*lists, labels=None, title="Plot of Values", xlabel="Time", ylabel="Values", x_values=None,
-               figsize=(10, 6), style="white", custom_palette=None, palette="twilight", linewidth=1.8, alpha=1,
+               figsize=(6, 4), style="white", custom_palette=None, palette="twilight", linewidth=1.1, alpha=1,
                marker=None, markersize=3, legend_loc='best', save_path=None):
     """
     Plot one or more lists or numpy arrays as lines on the same plot with enhanced aesthetics using Seaborn.

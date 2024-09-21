@@ -67,8 +67,8 @@ for long in long_values:
                                      long_n=long, short_n=0,
                                      risk_free_rate=0.00004455822024)
 
-    plot_lists(hybrid_cumulative_returns * 100, l_cum_ret_iter * 100, hybrid_benchmark_cumulative * 100,
-               labels=[f"Hybrid Model: Long {long} Assets", f"LSTM Baseline: Long {long} Assets", 'All Assets Benchmark'],
+    plot_lists(hybrid_cumulative_returns * 100, hybrid_benchmark_cumulative * 100, l_cum_ret_iter * 100,
+               labels=[f"Hybrid Model: Long {long} Assets", 'All Assets Benchmark', f"LSTM Baseline: Long {long} Assets"],
                title="",
                ylabel='% Cumulative Return',
                x_values=test_times,
@@ -142,9 +142,15 @@ def moving_average(data, win_size):
     return np.convolve(data, np.ones(win_size) / win_size, mode='valid')
 
 
-plot_lists(hybrid_model_tau_list, lstm_model_tau_list, labels=["Hybrid Kendall's Tau", "LSTM Kendall's Tau"], title="Kendall Rank Correlations Over Time")
+plot_lists(hybrid_model_tau_list, lstm_model_tau_list,
+           labels=["Hybrid Kendall's Tau", "LSTM Kendall's Tau"],
+           title="Kendall Rank Correlations Over Time",
+           save_path=os.path.join(PLOT_RESULTS, 'tau_1'))
 
-plot_lists(hybrid_model_rho_list, lstm_model_rho_list, labels=["Hybrid Spearman's Rho", "LSTM Spearman's Rho"], title="Spearman Rank Correlations Over Time")
+plot_lists(hybrid_model_rho_list, lstm_model_rho_list,
+           labels=["Hybrid Spearman's Rho", "LSTM Spearman's Rho"],
+           title="Spearman Rank Correlations Over Time",
+           save_path=os.path.join(PLOT_RESULTS, 'rho_1'))
 
 window_size = 120
 hybrid_rho_smooth = moving_average(hybrid_model_rho_list, window_size)
@@ -152,18 +158,25 @@ hybrid_tau_smooth = moving_average(hybrid_model_tau_list, window_size)
 lstm_rho_smooth = moving_average(lstm_model_rho_list, window_size)
 lstm_tau_smooth = moving_average(lstm_model_tau_list, window_size)
 
-plot_lists(hybrid_tau_smooth, lstm_tau_smooth, labels=["Hybrid Kendall's Tau", "LSTM Kendall's Tau"], title="Kendall Rank Correlations Over Time")
+plot_lists(hybrid_tau_smooth, lstm_tau_smooth,
+           labels=["Hybrid Kendall's Tau", "LSTM Kendall's Tau"],
+           title="Kendall Rank Correlations Over Time",
+           save_path=os.path.join(PLOT_RESULTS, 'tau_smooth'))
 
-plot_lists(hybrid_rho_smooth, lstm_rho_smooth, labels=[f"Hybrid Spearman's Rho {window_size} MA", f"LSTM Spearman's Rho {window_size} MA"],
-           title="Spearman Rank Correlations Over Time")
+plot_lists(hybrid_rho_smooth, lstm_rho_smooth,
+           labels=[f"Hybrid Spearman's Rho {window_size} MA", f"LSTM Spearman's Rho {window_size} MA"],
+           title="Spearman Rank Correlations Over Time",
+           save_path=os.path.join(PLOT_RESULTS, 'rho_smooth'))
 
 '''
 TOP K ACCURACY AND PRECISION
 '''
 
 print(f'\n')
-hybrid_avg_k_acc, hybrid_k_prec, hybrid_k = top_k_metrics(predicted_rankings, true_rankings, k=8, top_a=8)
-lstm_avg_k_acc, lstm_k_prec, lstm_k = top_k_metrics(lstm_baseline_predicted_rankings, lstm_baseline_true_rankings, k=8, top_a=8)
+hybrid_avg_k_acc, hybrid_k_prec, hybrid_k = top_k_metrics(predicted_rankings,
+                                                          true_rankings, k=4, top_a=10)
+lstm_avg_k_acc, lstm_k_prec, lstm_k = top_k_metrics(lstm_baseline_predicted_rankings,
+                                                    lstm_baseline_true_rankings, k=4, top_a=10)
 
 print(f'Hybrid Model: avg top {hybrid_k} accuracy: {hybrid_avg_k_acc:.3f}, precision: {hybrid_k_prec:.3f}')
 print(f'LSTM Model: avg top {lstm_k} accuracy: {lstm_avg_k_acc:.3f}, precision: {lstm_k_prec:.3f}')
@@ -185,11 +198,17 @@ for k in k_values:
     lstm_accuracies.append(lstm_avg_k_acc)
     lstm_precisions.append(lstm_k_prec)
 
-plot_lists(hybrid_precisions, lstm_precisions, labels=[f'Hybrid Model Precision (a={a_value})', f'LSTM Precision (a={a_value})'],
-           title=f'Top-K Precision Score with (a={a_value}) for Hybrid and LSTM Models', xlabel='Top-K', ylabel='Precision Value', x_values=k_values)
+plot_lists(hybrid_precisions, lstm_precisions,
+           labels=[f'Hybrid Model Precision (a={a_value})', f'LSTM Precision (a={a_value})'],
+           title=f'Top-K Precision Score with (a={a_value}) for Hybrid and LSTM Models',
+           xlabel='Top-K', ylabel='Precision Value', x_values=k_values,
+           save_path=os.path.join(PLOT_RESULTS, 'K_precision'))
 
-plot_lists(hybrid_accuracies, lstm_accuracies, labels=['Hybrid Model Top-K Accuracy', 'LSTM Top-K Accuracy'], title='Top-K Accuracy for Hybrid and LSTM Models',
-           xlabel='Values of K', ylabel='Accuracy', x_values=k_values)
+plot_lists(hybrid_accuracies, lstm_accuracies,
+           labels=['Hybrid Model Top-K Accuracy', 'LSTM Top-K Accuracy'],
+           title='Top-K Accuracy for Hybrid and LSTM Models',
+           xlabel='Values of K', ylabel='Accuracy', x_values=k_values,
+           save_path=os.path.join(PLOT_RESULTS, 'K_accuracy'))
 
 '''
 NDCG@K
@@ -204,7 +223,10 @@ window_size = 120
 hybrid_ndcg_smooth = moving_average(hybrid_ndcg_list, window_size)
 lstm_ndcg_smooth = moving_average(lstm_ndcg_list, window_size)
 
-plot_lists(hybrid_ndcg_smooth, lstm_ndcg_smooth, labels=["Hybrid NDCG", "LSTM NDCG"], title=f"NDCG {window_size} MOVING AVERAGE", ylabel='NDCG')
+plot_lists(hybrid_ndcg_smooth, lstm_ndcg_smooth,
+           labels=["Hybrid NDCG", "LSTM NDCG"],
+           title=f"NDCG {window_size} MOVING AVERAGE", ylabel='NDCG',
+           save_path=os.path.join(PLOT_RESULTS, 'ndcg_smooth'))
 
 h_ndcg_at_k = []
 l_ndcg_at_k = []
@@ -214,7 +236,10 @@ for k in k_values:
     h_ndcg_at_k.append(h_)
     l_ndcg_at_k.append(l_)
 
-plot_lists(h_ndcg_at_k, l_ndcg_at_k, labels=["Hybrid NDCG", "LSTM NDCG"], title=f"NDCG AVERAGE @K", ylabel='NDCG')
+plot_lists(h_ndcg_at_k, l_ndcg_at_k,
+           labels=["Hybrid NDCG", "LSTM NDCG"],
+           title=f"NDCG AVERAGE @K", ylabel='NDCG',
+           save_path=os.path.join(PLOT_RESULTS, 'ndcg_at_k'))
 
 '''
 ROLLING WINDOW DATA
