@@ -6,7 +6,7 @@ from Crypto_LSTM_GCN import EndToEndCryptoModel
 from pearson_correlation import CorrelationMatrix
 from visualisations import plot_values_time
 import random
-import visualkeras
+
 
 SEED = 42
 tf.random.set_seed(SEED)
@@ -17,6 +17,10 @@ random.seed(SEED)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'correlation_data', 'aggregated_asset_data.csv')
 RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results', 'lstm_gcn_results')
+SAVED_MODELS_DIR = os.path.join(BASE_DIR, '..', 'saved_models')
+
+if not os.path.exists(SAVED_MODELS_DIR):
+    os.makedirs(SAVED_MODELS_DIR)
 
 # Model Parameters
 SEQUENCE_LENGTH = 21
@@ -144,13 +148,14 @@ def main():
         if avg_valid_loss < best_val_loss:
             best_val_loss = avg_valid_loss
             print("Validation loss improved, saving the model.")
-            # Save the model weights if validation loss improved
             model.save_weights("best_model.weights.h5")
         else:
             print("No improvement in validation loss.")
 
     # Evaluation with Predictions on Test Set
     print("\nEvaluating the model on the test set...")
+    model.load_weights("best_model.weights.h5")
+    print('\nLoaded best model weights...')
     test_dataset = tf.data.Dataset.from_tensor_slices((x_test, test_adj_matrices, y_test))
     test_dataset = test_dataset.batch(batch_size)
 
@@ -173,12 +178,21 @@ def main():
     rankings = np.argsort(-predictions, axis=1)  # Rank in descending order, highest return is rank 0
     np.save(os.path.join(RESULTS_DIR, "rankings.npy"), rankings)
     np.save(os.path.join(RESULTS_DIR, "test_times.npy"), test_times)
+    print(f"\nSuccessfully saved the following in '{RESULTS_DIR}':")
+    print(f" - Predictions (predictions.npy)")
+    print(f" - True values (y_test.npy)")
+    print(f" - Rankings (rankings.npy)")
+    print(f" - Datetime values (test_times.npy)")
 
     plot_values_time(predictions, asset_names=asset_names, title_='Predictions', time_values=test_times)
     plot_values_time(y_test, asset_names=asset_names, title_='True Returns', time_values=test_times)
 
     # Save model
-    model.save("crypto_lstm_gcn_model.keras")
+    model.save(os.path.join(SAVED_MODELS_DIR, "hybrid_model.keras"))
+    print(f'Successfully saved model in {SAVED_MODELS_DIR}')
+    if os.path.exists("best_model.weights.h5"):
+        os.remove("best_model.weights.h5")
+        print("Temporary best model weights file deleted.")
 
 
 if __name__ == "__main__":

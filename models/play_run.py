@@ -14,16 +14,20 @@ tf.random.set_seed(SEED)
 np.random.seed(SEED)
 random.seed(SEED)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print(BASE_DIR)
+AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'play_data', 'aggregated_asset_data.csv')
+RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results', 'play_results')
+SAVED_MODEL_DIR = os.path.join(BASE_DIR, '..', 'saved_models')
+print(SAVED_MODEL_DIR)
+print(AGGREGATED_DATA_PATH)
+
 # Load the saved model
 with tf.keras.utils.custom_object_scope({'EndToEndCryptoModel': EndToEndCryptoModel}):
-    model = load_model("crypto_lstm_gcn_model.keras")
+    model = load_model(os.path.join(SAVED_MODEL_DIR, "hybrid_model.keras"))
 print('LSTM-GCN Model Loaded...')
 
 model.summary()
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-AGGREGATED_DATA_PATH = os.path.join(BASE_DIR, '..', 'play_data', 'aggregated_asset_data.csv')
-RESULTS_DIR = os.path.join(BASE_DIR, '..', 'results', 'play_results')
 
 # Model Parameters
 SEQUENCE_LENGTH = 21
@@ -75,13 +79,9 @@ rankings = np.argsort(-predictions, axis=1)
 np.save(os.path.join(RESULTS_DIR, "rankings.npy"), rankings)
 np.save(os.path.join(RESULTS_DIR, "predictions.npy"), predictions)
 np.save(os.path.join(RESULTS_DIR, "y_test.npy"), y_test)
+print(f'Results saved in {RESULTS_DIR}')
 
 # Output the predictions
-print("Predictions:", predictions.shape)
-print("y_test:", y_test.shape)
-
-print(y_test)
-
-# plot_model(model, to_file='model_architecture.png', show_shapes=True, show_layer_names=True)
-# model.summary()
-# visualkeras.layered_view(model, to_file='model_architecture_visualkeras.png').show()
+# print("Predictions:", predictions.shape)
+# print("y_test:", y_test.shape)
+# print(y_test)
